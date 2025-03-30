@@ -11,7 +11,6 @@ export default function Layout() {
         name="index"
         options={{
           headerShown: false,
-          title: "Home",
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="home" size={size} color={color} />
           ),
@@ -21,7 +20,6 @@ export default function Layout() {
         name="transactions"
         options={{
           title: "Transactions",
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="receipt" size={size} color={color} />
           ),
@@ -31,7 +29,6 @@ export default function Layout() {
         name="analyze"
         options={{
           title: "Analyze",
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="analytics" size={size} color={color} />
           ),
@@ -41,7 +38,6 @@ export default function Layout() {
         name="settings"
         options={{
           title: "Settings",
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" size={size} color={color} />
           ),

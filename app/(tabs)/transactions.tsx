@@ -21,7 +21,6 @@ export default function Transactions() {
           </View>
         ) : (
           <>
-            <Text style={styles.title}>Transactions</Text>
             <FlashList
               data={transactions}
               estimatedItemSize={83}
@@ -61,10 +60,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     rowGap: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
-  },
-  title: {
-    fontSize: theme.spacing.lg,
-    fontWeight: "bold",
-    color: theme.colors.text.primary,
   },
 });

@@ -46,7 +46,8 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
       </View>
       <View style={styles.contentContainer}>
         <Text style={styles.title} numberOfLines={1}>
-          {transaction.description}
+          {transaction.description.charAt(0).toUpperCase() +
+            transaction.description.slice(1)}
         </Text>
         <Text style={styles.date}>{transaction.date}</Text>
       </View>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     borderWidth: 1,
     borderColor: theme.colors.card.border,
-    marginVertical: theme.spacing.xs,
+    marginBottom: theme.spacing.sm,
   },
   pressed: {
     opacity: 0.7,

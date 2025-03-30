@@ -1,7 +1,6 @@
-import { Pressable, StyleSheet, Text, View, SafeAreaView } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { theme } from "@/theme";
-import { Link } from "expo-router";
+import { AddButton } from "@/components/add-button";
 
 export default function Index() {
   return (
@@ -9,15 +8,7 @@ export default function Index() {
       <View style={styles.container}>
         <Text style={styles.title}>March 2025</Text>
 
-        <Link href="/new" asChild>
-          <Pressable style={styles.add}>
-            <AntDesign
-              name="pluscircle"
-              size={56}
-              color={theme.colors.primary}
-            />
-          </Pressable>
-        </Link>
+        <AddButton />
       </View>
     </SafeAreaView>
   );
@@ -37,11 +28,5 @@ const styles = StyleSheet.create({
     fontSize: theme.spacing.lg,
     fontWeight: "bold",
     marginBottom: 16,
-  },
-  add: {
-    position: "absolute",
-    bottom: 16,
-    right: 16,
-    zIndex: 1,
   },
 });

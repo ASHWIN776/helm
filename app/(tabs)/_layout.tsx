@@ -11,6 +11,7 @@ export default function Layout() {
         name="index"
         options={{
           headerShown: false,
+          title: "Home",
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="home" size={size} color={color} />
           ),

@@ -1,10 +1,29 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import AnalyzeInput from "@/components/analyze-input";
+import AnalyzeIntro from "@/components/analyze-intro";
+import { theme } from "@/theme";
+import AnalysisResult from "@/components/analysis-result";
 
 export default function Analyze() {
+  const [message, setMessage] = useState("");
+  const [submittedMessage, setSubmittedMessage] = useState("");
+
+  const handleSubmit = () => {
+    if (!message) return;
+    setSubmittedMessage(message);
+    setMessage("");
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Analyze</Text>
+      {submittedMessage ? <AnalysisResult /> : <AnalyzeIntro />}
+      <AnalyzeInput
+        message={message}
+        onChange={setMessage}
+        onSubmit={handleSubmit}
+      />
       <StatusBar style="dark" />
     </View>
   );
@@ -13,8 +32,10 @@ export default function Analyze() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.white,
+    paddingBottom: 20,
+    paddingHorizontal: 16,
   },
 });

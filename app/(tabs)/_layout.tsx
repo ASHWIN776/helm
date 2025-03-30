@@ -18,30 +18,30 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="analyze"
-        options={{
-          headerShown: false,
-          title: "Analyze",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="analytics" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="transactions"
         options={{
-          headerShown: false,
           title: "Transactions",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="receipt" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
+        name="analyze"
+        options={{
+          title: "Analyze",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="analytics" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
-          headerShown: false,
           title: "Settings",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" size={size} color={color} />
           ),

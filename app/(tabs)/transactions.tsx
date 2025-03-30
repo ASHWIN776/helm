@@ -4,6 +4,7 @@ import { theme } from "@/theme";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactions } from "@/hooks/useTransactions";
 import { AddButton } from "@/components/add-button";
+import { StatusBar } from "expo-status-bar";
 
 export default function Transactions() {
   const { transactions, isLoading, error } = useTransactions();
@@ -36,6 +37,7 @@ export default function Transactions() {
           </>
         )}
       </View>
+      <StatusBar style="dark" />
     </SafeAreaView>
   );
 }

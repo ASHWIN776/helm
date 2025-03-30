@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { theme } from "@/theme";
 import { AddButton } from "@/components/add-button";
+import { StatusBar } from "expo-status-bar";
 
 export default function Index() {
   return (
@@ -10,6 +11,7 @@ export default function Index() {
 
         <AddButton />
       </View>
+      <StatusBar style="dark" />
     </SafeAreaView>
   );
 }

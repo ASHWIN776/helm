@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { theme } from "@/theme";
+import { theme } from "@/utils/theme";
 
 export default function Layout() {
   return (

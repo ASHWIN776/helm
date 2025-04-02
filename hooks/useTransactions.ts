@@ -1,7 +1,6 @@
-import { Transaction } from "@/types";
+import { Transaction } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
-
-const BASE_URL = "https://ae3a-210-14-55-77.ngrok-free.app";
+import { BASE_URL } from "@/utils/constants";
 
 interface TransactionsResponse {
   error: boolean;

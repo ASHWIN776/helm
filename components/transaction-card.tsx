@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { theme } from "../theme";
-import { Transaction } from "@/types";
+import { theme } from "../utils/theme";
+import { Transaction } from "@/utils/types";
 
 interface TransactionCardProps {
   transaction: Transaction;

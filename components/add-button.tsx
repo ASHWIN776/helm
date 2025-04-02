@@ -1,4 +1,4 @@
-import { theme } from "@/theme";
+import { theme } from "@/utils/theme";
 import { AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet } from "react-native";

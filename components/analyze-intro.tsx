@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { theme } from "@/theme";
+import { theme } from "@/utils/theme";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function AnalyzeIntro() {

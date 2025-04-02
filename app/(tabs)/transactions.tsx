@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { TransactionCard } from "@/components/transaction-card";
-import { theme } from "@/theme";
+import { theme } from "@/utils/theme";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactions } from "@/hooks/useTransactions";
 import { AddButton } from "@/components/add-button";

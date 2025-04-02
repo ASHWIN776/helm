@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import { theme } from "@/theme";
+import { theme } from "@/utils/theme";
 import { AddButton } from "@/components/add-button";
 import { StatusBar } from "expo-status-bar";
 

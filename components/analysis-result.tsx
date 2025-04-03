@@ -1,5 +1,6 @@
 import { AnalysisResponse } from "@/utils/types";
 import { ScrollView, StyleSheet, Text } from "react-native";
+import DynamicChart from "./dynamic-chart";
 
 interface Props {
   data: AnalysisResponse;
@@ -10,6 +11,15 @@ export default function AnalysisResult({ data }: Props) {
     <ScrollView style={styles.container}>
       <Text style={styles.submittedMessage}>{data.message}</Text>
       <Text style={styles.submittedMessage}>{data.thinking.sql}</Text>
+
+      {data.chartConfig && (
+        <DynamicChart
+          data={{
+            results: data.results,
+            chartConfig: data.chartConfig,
+          }}
+        />
+      )}
     </ScrollView>
   );
 }

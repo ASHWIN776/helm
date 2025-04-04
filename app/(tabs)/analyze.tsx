@@ -18,25 +18,27 @@ export default function Analyze() {
     setUserQuery(message);
   };
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Error: {error.message}</Text>
-      </View>
-    );
-  }
+  const showContent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.centerContainer}>
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+    if (error) {
+      return (
+        <View style={styles.centerContainer}>
+          <Text>Error: {error.message}</Text>
+        </View>
+      );
+    }
+    return data ? <AnalysisResult data={data} /> : <AnalyzeIntro />;
+  };
 
   return (
     <View style={styles.container}>
-      {data ? <AnalysisResult data={data} /> : <AnalyzeIntro />}
+      {showContent()}
       <AnalyzeInput
         message={message}
         onChange={setMessage}
@@ -55,5 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     paddingBottom: 20,
     paddingHorizontal: 16,
+    rowGap: 16,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

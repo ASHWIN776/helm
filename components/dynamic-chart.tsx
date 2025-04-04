@@ -13,7 +13,7 @@ interface Props {
 const colors = ["#000", "#0b0", "#00b", "#b00", "#b0b", "#0bb", "#bb0", "#bbb"];
 
 export default function DynamicChart({ data }: Props) {
-  const font = useFont(require("@/assets/fonts/SpaceMono-Regular.ttf"), 10);
+  const font = useFont(require("@/assets/fonts/SpaceMono-Regular.ttf"), 8);
 
   const renderChart = () => {
     const parsedChartData = data.results.map((item) => {
@@ -53,9 +53,7 @@ export default function DynamicChart({ data }: Props) {
               font,
             }}
           >
-            {/* 👇 render function exposes various data, such as points. */}
             {({ points, chartBounds }) =>
-              // 👇 and we'll use the Line component to render a line path.
               data.chartConfig?.yKeys.map((yKey, index) => (
                 <Bar
                   key={yKey}
@@ -79,9 +77,7 @@ export default function DynamicChart({ data }: Props) {
               font,
             }}
           >
-            {/* 👇 render function exposes various data, such as points. */}
-            {({ points, chartBounds }) =>
-              // 👇 and we'll use the Line component to render a line path.
+            {({ points }) =>
               data.chartConfig?.yKeys.map((yKey, index) => (
                 <Line
                   key={yKey}

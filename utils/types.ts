@@ -8,6 +8,8 @@ export type Transaction = {
   type: TransactionType;
 };
 
+export type UnsavedTransaction = Omit<Transaction, "id">;
+
 export type ChartConfig = {
   description: string; // Description of what the chart shows
   takeaway: string; // Main takeaway from the chart

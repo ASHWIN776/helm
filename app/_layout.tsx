@@ -7,9 +7,24 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            title: "Home",
+          }}
+        />
         <Stack.Screen name="onboarding" />
-        <Stack.Screen name="new" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="new"
+          options={{ presentation: "modal", headerShown: true }}
+        />
+        <Stack.Screen
+          name="confirm-transactions"
+          options={{
+            title: "Confirm Transactions",
+            headerShown: true,
+          }}
+        />
       </Stack>
     </QueryClientProvider>
   );

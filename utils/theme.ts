@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export const theme = {
   colors: {
     primary: "#007AFF",
@@ -18,6 +20,9 @@ export const theme = {
       background: "#FFFFFF",
       border: "#E5E7EB",
     },
+    input: {
+      border: "#ddd",
+    },
   },
 
   spacing: {
@@ -34,3 +39,17 @@ export const theme = {
     lg: 12,
   },
 };
+
+export const sharedStyles = StyleSheet.create({
+  title: {
+    fontSize: theme.spacing.lg,
+    fontWeight: "bold",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: theme.colors.input.border,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: 12,
+    fontSize: 16,
+  },
+});

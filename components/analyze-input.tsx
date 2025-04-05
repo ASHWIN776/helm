@@ -1,4 +1,4 @@
-import { theme } from "@/utils/theme";
+import { sharedStyles, theme } from "@/utils/theme";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -46,13 +46,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   input: {
+    ...sharedStyles.input,
     flex: 1,
     height: 46,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    fontSize: 16,
   },
   button: {
     backgroundColor: theme.colors.primary,

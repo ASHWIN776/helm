@@ -29,11 +29,10 @@ export function useReceiptExtraction() {
         body: formData,
       });
 
-      const data: ExtractionResponse = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || "Failed to extract receipt details");
+        throw new Error("Failed to extract receipt details");
       }
+      const data: ExtractionResponse = await response.json();
 
       if (data.error) {
         throw new Error(data.message);

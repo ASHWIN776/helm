@@ -5,21 +5,37 @@ import {
   Text,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactionStore } from "@/store/transactionStore";
 import { TransactionCard } from "@/components/transaction-card";
 import { theme } from "@/utils/theme";
 import { router } from "expo-router";
+import { useCreateTransactions } from "@/hooks/useCreateTransactions";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Confirm() {
   const transactions = useTransactionStore((state) => state.transactions);
+  const queryClient = useQueryClient();
   const clearTransactionStore = useTransactionStore(
     (state) => state.clearStore,
   );
+  const { mutate: createTransactions, isPending } = useCreateTransactions();
 
   const handleConfirm = () => {
-    // TODO: Implement transaction confirmation
+    createTransactions(transactions, {
+      onSuccess: () => {
+        clearTransactionStore();
+        queryClient.invalidateQueries({
+          queryKey: ["transactions"],
+        });
+        router.replace("/transactions");
+      },
+      onError: (error) => {
+        Alert.alert("Error", error.message);
+      },
+    });
   };
 
   const handleCancel = () => {
@@ -68,7 +84,11 @@ export default function Confirm() {
             onPress={handleConfirm}
             activeOpacity={0.8}
           >
-            <Text style={styles.submitButtonText}>Confirm</Text>
+            {isPending ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text style={styles.submitButtonText}>Confirm</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>

@@ -1,0 +1,32 @@
+import { BASE_URL } from "@/utils/constants";
+import { UnsavedTransaction } from "@/utils/types";
+import { useMutation } from "@tanstack/react-query";
+
+interface Response {
+  success: boolean;
+  message: string;
+}
+
+export function useCreateTransactions() {
+  return useMutation<Response, Error, UnsavedTransaction[]>({
+    mutationFn: async (transactions) => {
+      const response = await fetch(`${BASE_URL}/api/transactions`, {
+        method: "POST",
+        body: JSON.stringify({ transactions }),
+      });
+      console.log("Response:", response);
+
+      if (!response.ok) {
+        throw new Error("Failed to create transactions", { cause: response });
+      }
+
+      const data: Response = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message, { cause: data });
+      }
+
+      return data;
+    },
+  });
+}

@@ -27,10 +27,10 @@ interface TransactionCardProps {
 //   }
 // };
 
-export const TransactionCard: React.FC<TransactionCardProps> = ({
+export const TransactionCard = ({
   transaction,
   onPress,
-}) => {
+}: TransactionCardProps) => {
   const isExpense = transaction.type === "expense";
   return (
     <Pressable

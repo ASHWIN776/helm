@@ -2,6 +2,7 @@ import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import ReceiptForm from "@/components/receipt-form";
 import { theme } from "@/utils/theme";
+import StatementForm from "@/components/statement-form";
 
 export default function New() {
   const { type } = useLocalSearchParams();
@@ -10,6 +11,8 @@ export default function New() {
     switch (type) {
       case "receipt":
         return <ReceiptForm />;
+      case "statement":
+        return <StatementForm />;
       default:
         return null;
     }

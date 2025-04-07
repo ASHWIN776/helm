@@ -59,7 +59,7 @@ export default function ReceiptForm() {
           if (data.transactions) {
             console.log("Extracted Transactions:", data.transactions);
             addBulkTransactions(data.transactions);
-            router.replace("/confirm-transactions");
+            router.replace("/confirm-transactions?type=receipt");
           } else {
             console.log("No transactions found in the receipt");
           }

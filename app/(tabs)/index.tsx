@@ -10,7 +10,9 @@ export default function Index() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.title}>March 2025</Text>
-        <Pressable onPress={() => router.push("/confirm-transactions")}>
+        <Pressable
+          onPress={() => router.push("/confirm-transactions?type=statement")}
+        >
           <Text>Go to Confirm</Text>
         </Pressable>
         <AddButton />

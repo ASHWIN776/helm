@@ -11,9 +11,11 @@ import { FlashList } from "@shopify/flash-list";
 import { useTransactionStore } from "@/store/transactionStore";
 import { TransactionCard } from "@/components/transaction-card";
 import { theme } from "@/utils/theme";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { TransactionSummary } from "@/components/transaction-summary";
 
 export default function Confirm() {
   const transactions = useTransactionStore((state) => state.transactions);
@@ -22,6 +24,22 @@ export default function Confirm() {
     (state) => state.clearStore,
   );
   const { mutate: createTransactions, isPending } = useCreateTransactions();
+  const { type } = useLocalSearchParams();
+
+  const summaryData = React.useMemo(() => {
+    if (type === "statement") {
+      const income = transactions
+        .filter((t) => t.type === "income")
+        .reduce((sum, t) => sum + t.amount, 0);
+      const expense = transactions
+        .filter((t) => t.type === "expense")
+        .reduce((sum, t) => sum + t.amount, 0);
+      return { income, expense };
+    } else {
+      const total = transactions.reduce((sum, t) => sum + t.amount, 0);
+      return { total };
+    }
+  }, [transactions, type]);
 
   const handleConfirm = () => {
     createTransactions(transactions, {
@@ -38,9 +56,29 @@ export default function Confirm() {
     });
   };
 
+  const handleSubmit = () => {
+    Alert.alert(
+      "Save Transactions?",
+      `This will save all ${transactions.length} extracted transactions. Are you sure?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Confirm",
+          onPress: () => {
+            handleConfirm();
+          },
+          style: "default",
+        },
+      ],
+    );
+  };
+
   const handleCancel = () => {
     Alert.alert(
-      "Cancel Confirmation?",
+      "Clear Transactions?",
       "This will clear all extracted transactions. Are you sure?",
       [
         {
@@ -61,7 +99,22 @@ export default function Confirm() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <TransactionSummary
+        type={type as "statement" | "receipt"}
+        summaryData={summaryData}
+      />
       <View style={styles.listContainer}>
+        <View style={styles.listHeader}>
+          <Text style={styles.transactionCount}>
+            {transactions.length} Transaction
+            {transactions.length !== 1 ? "s" : ""}
+          </Text>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>
+              {type === "statement" ? "Statement" : "Receipt"}
+            </Text>
+          </View>
+        </View>
         <FlashList
           data={transactions}
           renderItem={({ item }) => <TransactionCard transaction={item} />}
@@ -81,13 +134,13 @@ export default function Confirm() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={handleConfirm}
+            onPress={handleSubmit}
             activeOpacity={0.8}
           >
             {isPending ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text style={styles.submitButtonText}>Confirm</Text>
+              <Text style={styles.submitButtonText}>Save</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -143,5 +196,28 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: "700",
+  },
+  listHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+  },
+  transactionCount: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: theme.colors.text.primary,
+  },
+  badge: {
+    backgroundColor: theme.colors.gray,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  badgeText: {
+    fontSize: 14,
+    color: theme.colors.text.secondary,
+    textTransform: "capitalize",
   },
 });

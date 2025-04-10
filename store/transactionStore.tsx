@@ -5,6 +5,9 @@ interface TransactionStore {
   transactions: Transaction[];
   addBulkTransactions: (transactions: UnsavedTransaction[]) => void;
   editTransaction: (id: string, updatedTransaction: Transaction) => void;
+  editTransactionDescriptions: (
+    items: { original: string; edited: string }[],
+  ) => void;
   clearStore: () => void;
 }
 
@@ -22,6 +25,19 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
       transactions: state.transactions.map((transaction) =>
         transaction.id === id ? updatedTransaction : transaction,
       ),
+    })),
+  editTransactionDescriptions: (
+    items: { original: string; edited: string }[],
+  ) =>
+    set((state) => ({
+      transactions: state.transactions.map((transaction) => {
+        const item = items.find(
+          (item) => item.original === transaction.description,
+        );
+        return item
+          ? { ...transaction, description: item.edited }
+          : transaction;
+      }),
     })),
   clearStore: () => set({ transactions: [] }),
 }));

@@ -15,6 +15,10 @@ export default function Index() {
         >
           <Text>Go to Confirm</Text>
         </Pressable>
+
+        <Pressable onPress={() => router.push("/confirm-name")}>
+          <Text>Go to Confirm Name</Text>
+        </Pressable>
         <AddButton />
       </View>
       <StatusBar style="dark" />

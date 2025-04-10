@@ -25,6 +25,13 @@ export default function RootLayout() {
             headerShown: true,
           }}
         />
+        <Stack.Screen
+          name="confirm-name"
+          options={{
+            title: "Save Descriptions",
+            headerShown: true,
+          }}
+        />
       </Stack>
     </QueryClientProvider>
   );

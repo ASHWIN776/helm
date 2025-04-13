@@ -3,7 +3,6 @@ import { TransactionCard } from "@/components/transaction-card";
 import { theme } from "@/utils/theme";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactions } from "@/hooks/useTransactions";
-import { AddButton } from "@/components/add-button";
 import { StatusBar } from "expo-status-bar";
 
 export default function Transactions() {
@@ -32,8 +31,6 @@ export default function Transactions() {
                 />
               )}
             />
-
-            <AddButton />
           </>
         )}
       </View>

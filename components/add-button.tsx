@@ -1,8 +1,9 @@
 import { theme } from "@/utils/theme";
 import { AntDesign } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View, Animated } from "react-native";
 import { useState, useRef } from "react";
+import { useOverlayStore } from "@/store/overlayStore";
 
 type AnimatedOptionProps = {
   label: string;
@@ -10,6 +11,7 @@ type AnimatedOptionProps = {
   icon: keyof typeof AntDesign.glyphMap;
   style: any;
   labelStyle: any;
+  setIsOpen: (value: boolean) => void;
 };
 
 const AnimatedOption = ({
@@ -18,24 +20,42 @@ const AnimatedOption = ({
   icon,
   style,
   labelStyle,
-}: AnimatedOptionProps) => (
-  <Animated.View style={[styles.option, style]}>
-    <Animated.Text style={[styles.label, labelStyle]}>{label}</Animated.Text>
-    <Link href={href} asChild>
-      <Pressable style={styles.button}>
+  setIsOpen,
+}: AnimatedOptionProps) => {
+  const { hide } = useOverlayStore();
+
+  const router = useRouter();
+  const onPress = () => {
+    setIsOpen(false);
+    router.push(href);
+    hide();
+  };
+
+  return (
+    <Animated.View style={[styles.option, style]}>
+      <Animated.Text style={[styles.label, labelStyle]}>{label}</Animated.Text>
+      <Pressable style={styles.button} onPress={onPress}>
         <AntDesign name={icon} size={24} color={theme.colors.primary} />
       </Pressable>
-    </Link>
-  </Animated.View>
-);
+    </Animated.View>
+  );
+};
 
 export const AddButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
+  const { show, hide } = useOverlayStore();
 
   const toggleMenu = () => {
     const toValue = isOpen ? 0 : 1;
     setIsOpen(!isOpen);
+
+    if (toValue === 1) {
+      show();
+    } else {
+      hide();
+    }
+
     Animated.spring(animation, {
       toValue,
       friction: 10,
@@ -68,7 +88,7 @@ export const AddButton = () => {
     opacity: animation,
   };
 
-  const options: AnimatedOptionProps[] = [
+  const options: Omit<AnimatedOptionProps, "setIsOpen">[] = [
     {
       label: "Statement",
       href: "/new?type=statement",
@@ -95,10 +115,10 @@ export const AddButton = () => {
   return (
     <View style={styles.container}>
       {options.map((option) => (
-        <AnimatedOption key={option.label} {...option} />
+        <AnimatedOption key={option.label} {...option} setIsOpen={toggleMenu} />
       ))}
 
-      <Pressable style={styles.add} onPress={toggleMenu}>
+      <Pressable onPress={toggleMenu}>
         <Animated.View
           style={[
             styles.icon,
@@ -124,13 +144,10 @@ export const AddButton = () => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 16,
+    bottom: 100,
     right: 16,
     alignItems: "center",
-    zIndex: 1,
-  },
-  add: {
-    zIndex: 2,
+    zIndex: 999,
   },
   icon: {
     borderRadius: theme.spacing.xl,
@@ -161,9 +178,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     width: 130,
     textAlign: "right",
     fontWeight: "500",
+    color: theme.colors.white,
   },
 });

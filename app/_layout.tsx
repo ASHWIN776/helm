@@ -1,9 +1,19 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
+import { View, StyleSheet } from "react-native";
+import { useOverlayStore } from "@/store/overlayStore";
+import { AddButton } from "@/components/add-button";
+import { ADD_BUTTON_ROUTES } from "@/utils/constants";
+import { theme } from "@/utils/theme";
 
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  const showOverlay = useOverlayStore((state) => state.isVisible);
+  const pathname = usePathname();
+
+  const showAddButton = ADD_BUTTON_ROUTES.some((route) => pathname === route);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Stack screenOptions={{ headerShown: false }}>
@@ -33,6 +43,16 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      {showOverlay && <View style={styles.overlay} />}
+      {showAddButton && <AddButton />}
     </QueryClientProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: theme.colors.overlay,
+    zIndex: 1,
+  },
+});

@@ -3,9 +3,19 @@ import { StyleSheet, View } from "react-native";
 import ReceiptForm from "@/components/receipt-form";
 import { theme } from "@/utils/theme";
 import StatementForm from "@/components/statement-form";
+import TransactionForm from "@/components/transaction-form";
+import { useEffect } from "react";
+import { useOverlayStore } from "@/store/overlayStore";
 
 export default function New() {
   const { type } = useLocalSearchParams();
+  const hide = useOverlayStore((state) => state.hide);
+
+  useEffect(() => {
+    return () => {
+      hide();
+    };
+  }, [hide]);
 
   const renderForm = () => {
     switch (type) {

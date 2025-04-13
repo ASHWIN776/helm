@@ -5,6 +5,7 @@ export const theme = {
     primary: "#007AFF",
     white: "#FFFFFF",
     black: "#000000",
+    overlay: "#000000e6",
     green: "#10B981",
     red: "#EF4444",
     gray: "#efefef",

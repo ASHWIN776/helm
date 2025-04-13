@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { theme } from "@/utils/theme";
+import { formatCurrency } from "@/utils/helpers";
 
 type TransactionSummaryProps = {
   type: "statement" | "receipt";
@@ -22,13 +23,13 @@ export function TransactionSummary({
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Cash Inflow</Text>
             <Text style={[styles.summaryValue, styles.inflowText]}>
-              ¥{(summaryData.income || 0).toFixed(2)}
+              {formatCurrency(summaryData.income || 0)}
             </Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Cash Outflow</Text>
             <Text style={[styles.summaryValue, styles.outflowText]}>
-              ¥{(summaryData.expense || 0).toFixed(2)}
+              {formatCurrency(summaryData.expense || 0)}
             </Text>
           </View>
         </View>
@@ -37,7 +38,7 @@ export function TransactionSummary({
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Amount</Text>
             <Text style={[styles.summaryValue, styles.totalText]}>
-              ¥{(summaryData.total || 0).toFixed(2)}
+              {formatCurrency(summaryData.total || 0)}
             </Text>
           </View>
         </View>

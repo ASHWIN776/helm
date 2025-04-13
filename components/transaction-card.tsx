@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../utils/theme";
 import { Transaction } from "@/utils/types";
+import { formatCurrency } from "@/utils/helpers";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -62,7 +63,8 @@ export const TransactionCard = ({
             },
           ]}
         >
-          {isExpense ? "-" : "+"}¥{Math.abs(transaction.amount).toFixed(2)}
+          {isExpense ? "-" : "+"}
+          {formatCurrency(Math.abs(transaction.amount))}
         </Text>
       </View>
     </Pressable>

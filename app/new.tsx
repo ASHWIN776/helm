@@ -13,6 +13,8 @@ export default function New() {
         return <ReceiptForm />;
       case "statement":
         return <StatementForm />;
+      case "form":
+        return <TransactionForm />;
       default:
         return null;
     }

@@ -1,3 +1,4 @@
+import { theme } from "@/utils/theme";
 import { ChartConfig, Result } from "@/utils/types";
 import { useFont } from "@shopify/react-native-skia";
 import { StyleSheet, View } from "react-native";
@@ -10,7 +11,16 @@ interface Props {
   };
 }
 
-const colors = ["#000", "#0b0", "#00b", "#b00", "#b0b", "#0bb", "#bb0", "#bbb"];
+const colors = [
+  theme.colors.primary,
+  "#0b0",
+  "#00b",
+  "#b00",
+  "#b0b",
+  "#0bb",
+  "#bb0",
+  "#bbb",
+];
 
 export default function DynamicChart({ data }: Props) {
   const font = useFont(require("@/assets/fonts/SpaceMono-Regular.ttf"), 8);
@@ -88,6 +98,7 @@ export default function DynamicChart({ data }: Props) {
                   chartBounds={chartBounds}
                   roundedCorners={{ topLeft: 5, topRight: 5 }}
                   barWidth={processedChartData.length > 5 ? 20 : 30}
+                  animate={{ type: "timing", duration: 1000 }}
                 />
               ))
             }
@@ -107,7 +118,10 @@ export default function DynamicChart({ data }: Props) {
                   processedChartData.length === 1
                     ? 1
                     : processedChartData.length - 1,
-                y: processedChartData.length + 1,
+                y:
+                  processedChartData.length > 10
+                    ? 10
+                    : processedChartData.length + 1,
               },
               formatXLabel: (value) => {
                 const date = new Date(value);

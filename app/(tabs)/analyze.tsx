@@ -18,6 +18,11 @@ export default function Analyze() {
     setUserQuery(message);
   };
 
+  const onSelectExamplePrompt = (message: string) => {
+    setMessage(message);
+    setUserQuery(message);
+  };
+
   const showContent = () => {
     if (isLoading) {
       return (
@@ -33,7 +38,11 @@ export default function Analyze() {
         </View>
       );
     }
-    return data ? <AnalysisResult data={data} /> : <AnalyzeIntro />;
+    return data ? (
+      <AnalysisResult data={data} />
+    ) : (
+      <AnalyzeIntro onSelectPrompt={onSelectExamplePrompt} />
+    );
   };
 
   return (

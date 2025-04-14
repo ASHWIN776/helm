@@ -30,7 +30,7 @@ export default function DynamicChart({ data }: Props) {
           return data;
         }
 
-        const subset = data.slice(0, 20);
+        const subset = data.slice(0, 10);
         return subset;
       }
       return data;
@@ -40,6 +40,12 @@ export default function DynamicChart({ data }: Props) {
       parsedChartData,
       data.chartConfig.type,
     );
+
+    const yValues = processedChartData.map((item) =>
+      data.chartConfig.yKeys.map((key) => +item[key]),
+    );
+    const minYValue = Math.min(...yValues.flat());
+    const maxYValue = Math.max(...yValues.flat());
 
     switch (data.chartConfig.type) {
       case "bar":
@@ -51,6 +57,26 @@ export default function DynamicChart({ data }: Props) {
             domainPadding={{ left: 30, right: 30 }}
             axisOptions={{
               font,
+              tickCount: {
+                x:
+                  processedChartData.length === 1
+                    ? 1
+                    : processedChartData.length - 1,
+                y: processedChartData.length + 1,
+              },
+              formatXLabel: (value) => {
+                const date = new Date(value);
+                if (
+                  date.toString() !== "Invalid Date" &&
+                  !isNaN(date.getTime())
+                ) {
+                  return `${date.getDate()}/${date.getMonth() + 1}`;
+                }
+                return String(value);
+              },
+            }}
+            domain={{
+              y: [minYValue < 10 ? 0 : minYValue - 10, maxYValue + 10],
             }}
           >
             {({ points, chartBounds }) =>
@@ -60,7 +86,8 @@ export default function DynamicChart({ data }: Props) {
                   points={points[yKey as keyof typeof points]}
                   color={colors[index % colors.length]}
                   chartBounds={chartBounds}
-                  roundedCorners={{ topLeft: 10, topRight: 10 }}
+                  roundedCorners={{ topLeft: 5, topRight: 5 }}
+                  barWidth={processedChartData.length > 5 ? 20 : 30}
                 />
               ))
             }
@@ -75,6 +102,26 @@ export default function DynamicChart({ data }: Props) {
             domainPadding={{ left: 30, right: 30 }}
             axisOptions={{
               font,
+              tickCount: {
+                x:
+                  processedChartData.length === 1
+                    ? 1
+                    : processedChartData.length - 1,
+                y: processedChartData.length + 1,
+              },
+              formatXLabel: (value) => {
+                const date = new Date(value);
+                if (
+                  date.toString() !== "Invalid Date" &&
+                  !isNaN(date.getTime())
+                ) {
+                  return `${date.getDate()}/${date.getMonth() + 1}`;
+                }
+                return String(value);
+              },
+            }}
+            domain={{
+              y: [minYValue < 10 ? 0 : minYValue - 10, maxYValue + 10],
             }}
           >
             {({ points }) =>

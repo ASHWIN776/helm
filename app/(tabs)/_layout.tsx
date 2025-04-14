@@ -29,7 +29,7 @@ export default function Layout() {
       <Tabs.Screen
         name="analyze"
         options={{
-          title: "Analyze",
+          title: "Ask",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="analytics" size={size} color={color} />
           ),

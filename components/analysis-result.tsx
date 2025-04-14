@@ -1,5 +1,5 @@
 import { AnalysisResponse } from "@/utils/types";
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, ScrollView } from "react-native";
 import DynamicChart from "./dynamic-chart";
 import { FlashList } from "@shopify/flash-list";
 import { useState, useMemo } from "react";
@@ -27,7 +27,11 @@ export default function AnalysisResult({ data }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <Text style={styles.chartTitle}>{data.chartConfig?.title}</Text>
       <View style={styles.tabContainer}>
         <Pressable
           style={[styles.tab, activeTab === "list" && styles.activeTab]}
@@ -70,8 +74,8 @@ export default function AnalysisResult({ data }: Props) {
       ) : (
         data.chartConfig && (
           <>
-            <Text style={styles.submittedMessage}>
-              {data.chartConfig?.description}
+            <Text style={styles.chartDescription}>
+              {data.chartConfig?.takeaway}
             </Text>
             <DynamicChart
               data={{
@@ -79,10 +83,13 @@ export default function AnalysisResult({ data }: Props) {
                 chartConfig: data.chartConfig,
               }}
             />
+            <Text style={styles.chartDescription}>
+              {data.chartConfig?.description}
+            </Text>
           </>
         )
       )}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -91,15 +98,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "stretch",
   },
-  submittedMessage: {
-    fontSize: 18,
-    marginTop: 20,
-    padding: 12,
-    borderRadius: 8,
+  contentContainer: {
+    paddingVertical: 16,
+    rowGap: 16,
   },
   tabContainer: {
     flexDirection: "row",
-    marginVertical: 16,
     borderRadius: theme.borderRadius.md,
     overflow: "hidden",
     backgroundColor: theme.colors.gray,
@@ -128,5 +132,14 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 4,
+  },
+  chartTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+  },
+  chartDescription: {
+    fontSize: 15,
+    color: theme.colors.text.secondary,
+    lineHeight: 24,
   },
 });

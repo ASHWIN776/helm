@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     gap: 8,
+    backgroundColor: theme.colors.white,
   },
   input: {
     ...sharedStyles.input,

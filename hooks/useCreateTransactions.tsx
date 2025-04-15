@@ -14,7 +14,6 @@ export function useCreateTransactions() {
         method: "POST",
         body: JSON.stringify({ transactions }),
       });
-      console.log("Response:", response);
 
       if (!response.ok) {
         throw new Error("Failed to create transactions", { cause: response });

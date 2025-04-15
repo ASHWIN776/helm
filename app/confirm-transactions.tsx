@@ -27,7 +27,7 @@ export default function Confirm() {
   const { type } = useLocalSearchParams();
 
   const summaryData = React.useMemo(() => {
-    if (type === "statement") {
+    if (type === "statement" || type === "text") {
       const income = transactions
         .filter((t) => t.type === "income")
         .reduce((sum, t) => sum + t.amount, 0);
@@ -100,7 +100,7 @@ export default function Confirm() {
   return (
     <SafeAreaView style={styles.container}>
       <TransactionSummary
-        type={type as "statement" | "receipt"}
+        type={type as "statement" | "receipt" | "text"}
         summaryData={summaryData}
       />
       <View style={styles.listContainer}>

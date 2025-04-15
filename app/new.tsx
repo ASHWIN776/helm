@@ -4,6 +4,7 @@ import ReceiptForm from "@/components/receipt-form";
 import { theme } from "@/utils/theme";
 import StatementForm from "@/components/statement-form";
 import TransactionForm from "@/components/transaction-form";
+import TextTransactionInput from "@/components/text-transaction-input";
 import { useEffect } from "react";
 import { useOverlayStore } from "@/store/overlayStore";
 
@@ -25,6 +26,8 @@ export default function New() {
         return <StatementForm />;
       case "form":
         return <TransactionForm />;
+      case "text":
+        return <TextTransactionInput />;
       default:
         return null;
     }

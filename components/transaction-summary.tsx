@@ -4,7 +4,7 @@ import { theme } from "@/utils/theme";
 import { formatCurrency } from "@/utils/helpers";
 
 type TransactionSummaryProps = {
-  type: "statement" | "receipt";
+  type: "statement" | "receipt" | "text";
   summaryData: {
     income?: number;
     expense?: number;
@@ -18,7 +18,7 @@ export function TransactionSummary({
 }: TransactionSummaryProps) {
   return (
     <View style={styles.summaryContainer}>
-      {type === "statement" ? (
+      {type === "statement" || type === "text" ? (
         <View style={styles.summaryContent}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Cash Inflow</Text>
@@ -49,8 +49,7 @@ export function TransactionSummary({
 
 const styles = StyleSheet.create({
   summaryContainer: {
-    marginHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.md,
+    margin: theme.spacing.md,
     backgroundColor: theme.colors.gray,
     borderRadius: 12,
     padding: theme.spacing.md,

@@ -90,6 +90,13 @@ export const AddButton = () => {
 
   const options: Omit<AnimatedOptionProps, "setIsOpen">[] = [
     {
+      label: "Text",
+      href: "/new?type=text",
+      icon: "filetext1",
+      style: createAnimatedStyle(-240),
+      labelStyle,
+    },
+    {
       label: "Statement",
       href: "/new?type=statement",
       icon: "profile",

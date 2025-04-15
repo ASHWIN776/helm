@@ -11,14 +11,14 @@ import {
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useReceiptExtraction } from "@/hooks/useReceiptExtraction";
+import { useTransactionExtraction } from "@/hooks/useTransactionExtraction";
 import { useNavigation, useRouter } from "expo-router";
 import { useTransactionStore } from "@/store/transactionStore";
 
 export default function ReceiptForm() {
   const [selectedImage, setSelectedImage] =
     useState<ImagePicker.ImagePickerAsset | null>(null);
-  const { mutate: extractReceipt, isPending } = useReceiptExtraction();
+  const { mutate: extractReceipt, isPending } = useTransactionExtraction();
   const navigation = useNavigation();
   const router = useRouter();
   const { addBulkTransactions } = useTransactionStore();

@@ -16,15 +16,22 @@ import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { TransactionSummary } from "@/components/transaction-summary";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { TextInput } from "react-native";
 
 export default function Confirm() {
   const transactions = useTransactionStore((state) => state.transactions);
+  const editTransactionInStore = useTransactionStore(
+    (state) => state.editTransaction,
+  );
   const queryClient = useQueryClient();
   const clearTransactionStore = useTransactionStore(
     (state) => state.clearStore,
   );
   const { mutate: createTransactions, isPending } = useCreateTransactions();
   const { type } = useLocalSearchParams();
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+  const [editTransaction, setEditTransaction] = React.useState<any>(null);
 
   const summaryData = React.useMemo(() => {
     if (type === "statement" || type === "text") {
@@ -97,6 +104,21 @@ export default function Confirm() {
     );
   };
 
+  // Save edited transaction
+  const handleSaveEdit = () => {
+    if (expandedIndex !== null && editTransaction) {
+      editTransactionInStore(editTransaction.id, editTransaction);
+      setExpandedIndex(null);
+      setEditTransaction(null);
+    }
+  };
+
+  // Cancel edit
+  const handleCancelEdit = () => {
+    setExpandedIndex(null);
+    setEditTransaction(null);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TransactionSummary
@@ -117,7 +139,138 @@ export default function Confirm() {
         </View>
         <FlashList
           data={transactions}
-          renderItem={({ item }) => <TransactionCard transaction={item} />}
+          extraData={expandedIndex}
+          renderItem={({ item, index }) => (
+            <View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ flex: 1 }}>
+                  <TransactionCard transaction={item} />
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setExpandedIndex(index);
+                    setEditTransaction({ ...item });
+                  }}
+                  style={{ padding: 8 }}
+                  accessibilityLabel="Edit Transaction"
+                >
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={22}
+                    color={theme.colors.text.secondary}
+                  />
+                </TouchableOpacity>
+              </View>
+              {expandedIndex === index ? (
+                <View
+                  style={{
+                    backgroundColor: theme.colors.card.background,
+                    padding: theme.spacing.md,
+                    borderRadius: theme.borderRadius.md,
+                    marginTop: theme.spacing.xs,
+                    marginBottom: theme.spacing.sm,
+                    borderWidth: 1,
+                    borderColor: theme.colors.card.border,
+                  }}
+                >
+                  <Text
+                    style={{ fontWeight: "600", fontSize: 16, marginBottom: 8 }}
+                  >
+                    Edit Transaction
+                  </Text>
+                  <TextInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: theme.colors.card.border,
+                      borderRadius: 8,
+                      padding: 8,
+                      marginBottom: 8,
+                    }}
+                    value={editTransaction.description}
+                    onChangeText={(text) =>
+                      setEditTransaction((prev: any) => ({
+                        ...prev,
+                        description: text,
+                      }))
+                    }
+                    placeholder="Description"
+                  />
+                  <TextInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: theme.colors.card.border,
+                      borderRadius: 8,
+                      padding: 8,
+                      marginBottom: 8,
+                    }}
+                    value={String(editTransaction.amount)}
+                    onChangeText={(text) =>
+                      setEditTransaction((prev: any) => ({
+                        ...prev,
+                        amount: Number(text),
+                      }))
+                    }
+                    placeholder="Amount"
+                    keyboardType="numeric"
+                  />
+                  <TextInput
+                    style={{
+                      borderWidth: 1,
+                      borderColor: theme.colors.card.border,
+                      borderRadius: 8,
+                      padding: 8,
+                      marginBottom: 8,
+                    }}
+                    value={editTransaction.date}
+                    onChangeText={(text) =>
+                      setEditTransaction((prev: any) => ({
+                        ...prev,
+                        date: text,
+                      }))
+                    }
+                    placeholder="Date"
+                  />
+                  <View style={{ flexDirection: "row", gap: 12 }}>
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        backgroundColor: theme.colors.gray,
+                        padding: 12,
+                        borderRadius: 8,
+                        alignItems: "center",
+                      }}
+                      onPress={handleCancelEdit}
+                    >
+                      <Text
+                        style={{
+                          color: theme.colors.text.primary,
+                          fontWeight: "700",
+                        }}
+                      >
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        backgroundColor: theme.colors.primary,
+                        padding: 12,
+                        borderRadius: 8,
+                        alignItems: "center",
+                      }}
+                      onPress={handleSaveEdit}
+                    >
+                      <Text
+                        style={{ color: theme.colors.white, fontWeight: "700" }}
+                      >
+                        Save
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : null}
+            </View>
+          )}
           estimatedItemSize={100}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           contentContainerStyle={styles.contentContainer}

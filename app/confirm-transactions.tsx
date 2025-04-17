@@ -16,15 +16,23 @@ import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { TransactionSummary } from "@/components/transaction-summary";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { InlineTransactionEditForm } from "@/components/inline-transaction-edit-form";
+import { Transaction } from "@/utils/types";
 
 export default function Confirm() {
   const transactions = useTransactionStore((state) => state.transactions);
+  const editTransactionInStore = useTransactionStore(
+    (state) => state.editTransaction,
+  );
   const queryClient = useQueryClient();
   const clearTransactionStore = useTransactionStore(
     (state) => state.clearStore,
   );
   const { mutate: createTransactions, isPending } = useCreateTransactions();
   const { type } = useLocalSearchParams();
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+  const [editTransaction, setEditTransaction] = React.useState<any>(null);
 
   const summaryData = React.useMemo(() => {
     if (type === "statement" || type === "text") {
@@ -97,6 +105,21 @@ export default function Confirm() {
     );
   };
 
+  // Save edited transaction
+  const handleSaveEdit = (transaction: Transaction) => {
+    if (expandedIndex !== null && editTransaction) {
+      editTransactionInStore(transaction.id, transaction);
+      setExpandedIndex(null);
+      setEditTransaction(null);
+    }
+  };
+
+  // Cancel edit
+  const handleCancelEdit = () => {
+    setExpandedIndex(null);
+    setEditTransaction(null);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TransactionSummary
@@ -117,7 +140,37 @@ export default function Confirm() {
         </View>
         <FlashList
           data={transactions}
-          renderItem={({ item }) => <TransactionCard transaction={item} />}
+          extraData={expandedIndex}
+          renderItem={({ item, index }) => (
+            <View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ flex: 1 }}>
+                  <TransactionCard transaction={item} />
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setExpandedIndex(index);
+                    setEditTransaction({ ...item });
+                  }}
+                  style={{ padding: 8 }}
+                  accessibilityLabel="Edit Transaction"
+                >
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={22}
+                    color={theme.colors.text.secondary}
+                  />
+                </TouchableOpacity>
+              </View>
+              {expandedIndex === index && editTransaction ? (
+                <InlineTransactionEditForm
+                  transaction={editTransaction}
+                  onSave={handleSaveEdit}
+                  onCancel={handleCancelEdit}
+                />
+              ) : null}
+            </View>
+          )}
           estimatedItemSize={100}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           contentContainerStyle={styles.contentContainer}

@@ -47,8 +47,7 @@ export const TransactionCard = ({
       </View>
       <View style={styles.contentContainer}>
         <Text style={styles.title} numberOfLines={1}>
-          {transaction.description.charAt(0).toUpperCase() +
-            transaction.description.slice(1)}
+          {transaction.description}
         </Text>
         <Text style={styles.date}>{transaction.date}</Text>
       </View>

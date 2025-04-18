@@ -1,12 +1,54 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { TransactionCard } from "@/components/transaction-card";
 import { theme } from "@/utils/theme";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactions } from "@/hooks/useTransactions";
 import { StatusBar } from "expo-status-bar";
+import React, { useCallback, useState } from "react";
+import { Modal } from "react-native";
+import TransactionForm from "@/components/transaction-form";
+import { Transaction } from "@/utils/types";
+import { useEditTransaction } from "@/hooks/useEditTransaction";
 
 export default function Transactions() {
-  const { transactions, isLoading, error } = useTransactions();
+  const { data: transactions, isLoading, error, refetch } = useTransactions();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const { mutate: editTransaction, isPending: isEditing } =
+    useEditTransaction();
+
+  const handleCardPress = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    setSelectedTransaction(null);
+  };
+
+  const handleEditSubmit = (updatedTx: Transaction) => {
+    editTransaction(updatedTx, {
+      onSuccess: () => {
+        setModalVisible(false);
+        setSelectedTransaction(null);
+      },
+      onError: (err) => {
+        alert(err.message || "Failed to update transaction");
+      },
+    });
+  };
+
+  const onRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -22,17 +64,40 @@ export default function Transactions() {
         ) : (
           <>
             <FlashList
-              data={transactions}
+              refreshControl={
+                <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+              }
+              data={transactions?.data ?? []}
               estimatedItemSize={83}
               renderItem={({ item }) => (
                 <TransactionCard
                   transaction={item}
-                  onPress={() => console.log("Transaction pressed:", item.id)}
+                  onPress={() => handleCardPress(item)}
                 />
               )}
             />
           </>
         )}
+        <Modal
+          visible={modalVisible}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          onRequestClose={handleModalClose}
+        >
+          <View
+            style={{
+              flex: 1,
+              padding: 20,
+            }}
+          >
+            <TransactionForm
+              transaction={selectedTransaction}
+              onSubmit={handleEditSubmit}
+              submitLabel="Save Changes"
+              isPending={isEditing}
+            />
+          </View>
+        </Modal>
       </View>
       <StatusBar style="dark" />
     </SafeAreaView>

@@ -9,11 +9,7 @@ interface TransactionsResponse {
 }
 
 export const useTransactions = () => {
-  const {
-    data: transactions,
-    isLoading,
-    error,
-  } = useQuery<TransactionsResponse>({
+  return useQuery<TransactionsResponse>({
     queryKey: ["transactions"],
     queryFn: async () => {
       const response = await fetch(`${BASE_URL}/api/transactions`);
@@ -23,10 +19,4 @@ export const useTransactions = () => {
       return response.json();
     },
   });
-
-  return {
-    transactions: transactions?.data ?? [],
-    isLoading,
-    error,
-  };
 };

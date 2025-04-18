@@ -12,26 +12,64 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation, useRouter } from "expo-router";
-import { UnsavedTransaction } from "@/utils/types";
+import { Transaction, UnsavedTransaction } from "@/utils/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function TransactionForm() {
-  const [transaction, setTransaction] = useState<UnsavedTransaction>({
-    date: new Date().toISOString().split("T")[0],
-    amount: 0,
-    description: "",
-    type: "expense",
-  });
+/**
+ * TransactionForm component for creating and editing transactions.
+ *
+ * - If a `transaction` prop is provided, the form is pre-filled for editing.
+ * - If no `transaction` is provided, the form is initialized for creating a new transaction.
+ * - On submit, calls the `onSubmit` callback (if provided), otherwise creates a new transaction via API.
+ * - The submit button shows a loading spinner if `isPending` or `isPendingCreate` is true.
+ *
+ * @param {Object} props
+ * @param {Transaction | null} [props.transaction] - Transaction to edit (if any)
+ * @param {(tx: Transaction) => void} [props.onSubmit] - Callback for submit (edit/create)
+ * @param {string} [props.submitLabel] - Label for the submit button
+ * @param {boolean} [props.isPending] - If true, shows loading spinner on submit button
+ */
+export default function TransactionForm({
+  transaction: initialTransaction,
+  onSubmit,
+  submitLabel = "Add Transaction",
+  isPending = false,
+}: {
+  transaction?: Transaction | null;
+  onSubmit?: (tx: Transaction) => void;
+  submitLabel?: string;
+  isPending?: boolean;
+}) {
+  const [transaction, setTransaction] = useState<
+    UnsavedTransaction | Transaction
+  >(
+    initialTransaction || {
+      date: new Date().toISOString().split("T")[0],
+      amount: 0,
+      description: "",
+      type: "expense",
+    },
+  );
   const router = useRouter();
   const navigation = useNavigation();
-  const { mutate: createTransaction, isPending } = useCreateTransactions();
+  const { mutate: createTransaction, isPending: isPendingCreate } =
+    useCreateTransactions();
   const queryClient = useQueryClient();
 
   const handleSubmit = () => {
     if (!transaction.date || !transaction.amount || !transaction.description) {
       alert("Please fill in all fields");
+      return;
+    }
+    if (onSubmit && (transaction as Transaction).id) {
+      onSubmit(transaction as Transaction);
+      return;
+    }
+
+    // If transaction has an id, it's already saved
+    if ((transaction as Transaction).id) {
       return;
     }
 
@@ -54,9 +92,9 @@ export default function TransactionForm() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "New Transaction",
+      title: initialTransaction ? "Edit Transaction" : "New Transaction",
     });
-  }, [navigation]);
+  }, [navigation, initialTransaction]);
 
   return (
     <KeyboardAvoidingView
@@ -160,14 +198,17 @@ export default function TransactionForm() {
       </ScrollView>
 
       <TouchableOpacity
-        style={[styles.submitButton, isPending && styles.submitButtonDisabled]}
+        style={[
+          styles.submitButton,
+          (isPending || isPendingCreate) && styles.submitButtonDisabled,
+        ]}
         onPress={handleSubmit}
-        disabled={isPending}
+        disabled={isPending || isPendingCreate}
       >
-        {isPending ? (
+        {isPending || isPendingCreate ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.submitButtonText}>Add Transaction</Text>
+          <Text style={styles.submitButtonText}>{submitLabel}</Text>
         )}
       </TouchableOpacity>
     </KeyboardAvoidingView>

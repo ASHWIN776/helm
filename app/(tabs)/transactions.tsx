@@ -15,6 +15,7 @@ import { Modal } from "react-native";
 import TransactionForm from "@/components/transaction-form";
 import { Transaction } from "@/utils/types";
 import { useEditTransaction } from "@/hooks/useEditTransaction";
+import { useDeleteTransaction } from "@/hooks/useDeleteTransaction";
 
 export default function Transactions() {
   const { data: transactions, isLoading, error, refetch } = useTransactions();
@@ -23,6 +24,8 @@ export default function Transactions() {
     useState<Transaction | null>(null);
   const { mutate: editTransaction, isPending: isEditing } =
     useEditTransaction();
+  const { mutate: deleteTransaction, isPending: isDeleting } =
+    useDeleteTransaction();
 
   const handleCardPress = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
@@ -42,6 +45,19 @@ export default function Transactions() {
       },
       onError: (err) => {
         alert(err.message || "Failed to update transaction");
+      },
+    });
+  };
+
+  const handleDelete = () => {
+    deleteTransaction(selectedTransaction as Transaction, {
+      onSuccess: () => {
+        setModalVisible(false);
+        setSelectedTransaction(null);
+      },
+      onError: (error) => {
+        console.error("Error deleting transaction:", error);
+        alert("Error deleting transaction. Please try again.");
       },
     });
   };
@@ -93,8 +109,11 @@ export default function Transactions() {
             <TransactionForm
               transaction={selectedTransaction}
               onSubmit={handleEditSubmit}
-              submitLabel="Save Changes"
+              submitLabel="Save"
               isPending={isEditing}
+              showDelete
+              isPendingDelete={isDeleting}
+              onDelete={handleDelete}
             />
           </View>
         </Modal>

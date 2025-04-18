@@ -9,6 +9,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation, useRouter } from "expo-router";
@@ -16,6 +17,16 @@ import { Transaction, UnsavedTransaction } from "@/utils/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
+
+interface Props {
+  transaction?: Transaction | null;
+  onSubmit?: (tx: Transaction) => void;
+  submitLabel?: string;
+  isPending?: boolean;
+  showDelete?: boolean;
+  onDelete?: () => void;
+  isPendingDelete?: boolean;
+}
 
 /**
  * TransactionForm component for creating and editing transactions.
@@ -30,18 +41,19 @@ import { useQueryClient } from "@tanstack/react-query";
  * @param {(tx: Transaction) => void} [props.onSubmit] - Callback for submit (edit/create)
  * @param {string} [props.submitLabel] - Label for the submit button
  * @param {boolean} [props.isPending] - If true, shows loading spinner on submit button
+ * @param {boolean} [props.showDelete] - If true, shows delete button
+ * @param {() => void} [props.onDelete] - Callback for delete
+ * @param {boolean} [props.isPendingDelete] - If true, shows loading spinner on delete button
  */
 export default function TransactionForm({
   transaction: initialTransaction,
   onSubmit,
   submitLabel = "Add Transaction",
   isPending = false,
-}: {
-  transaction?: Transaction | null;
-  onSubmit?: (tx: Transaction) => void;
-  submitLabel?: string;
-  isPending?: boolean;
-}) {
+  showDelete = false,
+  onDelete,
+  isPendingDelete = false,
+}: Props) {
   const [transaction, setTransaction] = useState<
     UnsavedTransaction | Transaction
   >(
@@ -90,6 +102,24 @@ export default function TransactionForm({
     });
   };
 
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Transaction",
+      "Are you sure you want to delete this transaction?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: onDelete,
+          style: "destructive",
+        },
+      ],
+    );
+  };
+
   useEffect(() => {
     navigation.setOptions({
       title: initialTransaction ? "Edit Transaction" : "New Transaction",
@@ -100,7 +130,7 @@ export default function TransactionForm({
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={100}
+      keyboardVerticalOffset={showDelete ? 75 : 100}
     >
       <ScrollView contentContainerStyle={{ gap: 24 }} style={{ flex: 1 }}>
         <View style={styles.formSection}>
@@ -197,20 +227,40 @@ export default function TransactionForm({
         </View>
       </ScrollView>
 
-      <TouchableOpacity
-        style={[
-          styles.submitButton,
-          (isPending || isPendingCreate) && styles.submitButtonDisabled,
-        ]}
-        onPress={handleSubmit}
-        disabled={isPending || isPendingCreate}
-      >
-        {isPending || isPendingCreate ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text style={styles.submitButtonText}>{submitLabel}</Text>
-        )}
-      </TouchableOpacity>
+      <View style={styles.buttonRow}>
+        {showDelete ? (
+          <TouchableOpacity
+            style={[
+              styles.deleteButton,
+              isPendingDelete && styles.deleteButtonDisabled,
+            ]}
+            onPress={handleDelete}
+            disabled={isPendingDelete}
+            activeOpacity={0.7}
+          >
+            {isPendingDelete ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text style={styles.deleteButtonText}>Delete</Text>
+            )}
+          </TouchableOpacity>
+        ) : undefined}
+        <TouchableOpacity
+          style={[
+            styles.submitButton,
+            (isPending || isPendingCreate) && styles.submitButtonDisabled,
+          ]}
+          onPress={handleSubmit}
+          disabled={isPending || isPendingCreate}
+          activeOpacity={0.7}
+        >
+          {isPending || isPendingCreate ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.submitButtonText}>{submitLabel}</Text>
+          )}
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -219,7 +269,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
   },
   formSection: {
     rowGap: 8,
@@ -266,9 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
-    width: "100%",
     alignItems: "center",
-    marginTop: 8,
   },
   submitButtonDisabled: {
     opacity: 0.7,
@@ -277,5 +325,24 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "700",
+  },
+  deleteButton: {
+    borderWidth: 1,
+    borderColor: theme.colors.red,
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  deleteButtonDisabled: {
+    opacity: 0.7,
+  },
+  deleteButtonText: {
+    color: theme.colors.red,
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  buttonRow: {
+    gap: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
   },
 });

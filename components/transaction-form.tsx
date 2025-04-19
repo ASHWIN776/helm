@@ -239,7 +239,7 @@ export default function TransactionForm({
             activeOpacity={0.7}
           >
             {isPendingDelete ? (
-              <ActivityIndicator color="white" />
+              <ActivityIndicator color={theme.colors.red} />
             ) : (
               <Text style={styles.deleteButtonText}>Delete</Text>
             )}

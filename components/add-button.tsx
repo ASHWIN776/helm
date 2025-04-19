@@ -1,5 +1,6 @@
 import { theme } from "@/utils/theme";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View, Animated } from "react-native";
 import { useState, useRef } from "react";
@@ -8,7 +9,7 @@ import { useOverlayStore } from "@/store/overlayStore";
 type AnimatedOptionProps = {
   label: string;
   href: `/new?type=${string}`;
-  icon: keyof typeof AntDesign.glyphMap;
+  icon: React.ReactNode;
   style: any;
   labelStyle: any;
   setIsOpen: (value: boolean) => void;
@@ -35,7 +36,7 @@ const AnimatedOption = ({
     <Animated.View style={[styles.option, style]}>
       <Animated.Text style={[styles.label, labelStyle]}>{label}</Animated.Text>
       <Pressable style={styles.button} onPress={onPress}>
-        <AntDesign name={icon} size={24} color={theme.colors.primary} />
+        {icon}
       </Pressable>
     </Animated.View>
   );
@@ -90,30 +91,34 @@ export const AddButton = () => {
 
   const options: Omit<AnimatedOptionProps, "setIsOpen">[] = [
     {
-      label: "Text",
-      href: "/new?type=text",
-      icon: "filetext1",
+      label: "Form",
+      href: "/new?type=form",
+      icon: <AntDesign name="form" size={24} color={theme.colors.primary} />,
       style: createAnimatedStyle(-240),
       labelStyle,
     },
     {
       label: "Statement",
       href: "/new?type=statement",
-      icon: "profile",
+      icon: <AntDesign name="profile" size={24} color={theme.colors.primary} />,
       style: createAnimatedStyle(-180),
-      labelStyle,
-    },
-    {
-      label: "Form",
-      href: "/new?type=form",
-      icon: "form",
-      style: createAnimatedStyle(-120),
       labelStyle,
     },
     {
       label: "Receipt",
       href: "/new?type=receipt",
-      icon: "filetext1",
+      icon: (
+        <AntDesign name="filetext1" size={24} color={theme.colors.primary} />
+      ),
+      style: createAnimatedStyle(-120),
+      labelStyle,
+    },
+    {
+      label: "Text",
+      href: "/new?type=text",
+      icon: (
+        <MaterialIcons name="message" size={24} color={theme.colors.primary} />
+      ),
       style: createAnimatedStyle(-60),
       labelStyle,
     },

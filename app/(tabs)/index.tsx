@@ -51,7 +51,6 @@ export default function Index() {
         }
         contentContainerStyle={styles.scrollContent}
       >
-        <Text style={styles.title}>April 2025</Text>
         <View style={styles.summaryContainer}>
           <Text style={styles.periodTitle}>Today</Text>
           <View style={styles.summaryContent}>

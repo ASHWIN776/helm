@@ -8,18 +8,17 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTransactionExtraction } from "@/hooks/useTransactionExtraction";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useTransactionStore } from "@/store/transactionStore";
 
 export default function ReceiptForm() {
   const [selectedImage, setSelectedImage] =
     useState<ImagePicker.ImagePickerAsset | null>(null);
   const { mutate: extractReceipt, isPending } = useTransactionExtraction();
-  const navigation = useNavigation();
   const router = useRouter();
   const { addBulkTransactions } = useTransactionStore();
 
@@ -70,12 +69,6 @@ export default function ReceiptForm() {
       },
     );
   };
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: "Receipt",
-    });
-  }, [navigation]);
 
   return (
     <View style={styles.container}>

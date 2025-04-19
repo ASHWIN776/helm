@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack, usePathname } from "expo-router";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { useOverlayStore } from "@/store/overlayStore";
 import { AddButton } from "@/components/add-button";
 import { ADD_BUTTON_ROUTES } from "@/utils/constants";
@@ -10,6 +10,7 @@ const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const showOverlay = useOverlayStore((state) => state.isVisible);
+  const { hide } = useOverlayStore();
   const pathname = usePathname();
 
   const showAddButton = ADD_BUTTON_ROUTES.some((route) => pathname === route);
@@ -43,7 +44,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-      {showOverlay && <View style={styles.overlay} />}
+      {showOverlay && <Pressable onPress={hide} style={styles.overlay} />}
       {showAddButton && <AddButton />}
     </QueryClientProvider>
   );

@@ -11,8 +11,8 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { useEffect, useState } from "react";
-import { useNavigation, useRouter } from "expo-router";
+import { useState } from "react";
+import { useRouter } from "expo-router";
 import { Transaction, UnsavedTransaction } from "@/utils/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useCreateTransactions } from "@/hooks/useCreateTransactions";
@@ -65,7 +65,6 @@ export default function TransactionForm({
     },
   );
   const router = useRouter();
-  const navigation = useNavigation();
   const { mutate: createTransaction, isPending: isPendingCreate } =
     useCreateTransactions();
   const queryClient = useQueryClient();
@@ -120,12 +119,6 @@ export default function TransactionForm({
       ],
     );
   };
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: initialTransaction ? "Edit Transaction" : "New Transaction",
-    });
-  }, [navigation, initialTransaction]);
 
   return (
     <KeyboardAvoidingView

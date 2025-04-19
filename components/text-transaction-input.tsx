@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,14 +10,13 @@ import {
   View,
 } from "react-native";
 import { theme, sharedStyles } from "@/utils/theme";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useTransactionExtraction } from "@/hooks/useTransactionExtraction";
 import { useTransactionStore } from "@/store/transactionStore";
 
 export default function TextTransactionInput() {
   const [text, setText] = useState("");
   const router = useRouter();
-  const navigation = useNavigation();
   const { mutate: extractTransactions, isPending } = useTransactionExtraction();
   const { addBulkTransactions } = useTransactionStore();
 
@@ -44,12 +43,6 @@ export default function TextTransactionInput() {
       },
     );
   };
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: "Text",
-    });
-  }, [navigation]);
 
   return (
     <KeyboardAvoidingView

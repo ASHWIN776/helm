@@ -3,7 +3,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View, Animated } from "react-native";
-import { useState, useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useOverlayStore } from "@/store/overlayStore";
 
 type AnimatedOptionProps = {
@@ -12,7 +12,6 @@ type AnimatedOptionProps = {
   icon: React.ReactNode;
   style: any;
   labelStyle: any;
-  setIsOpen: (value: boolean) => void;
 };
 
 const AnimatedOption = ({
@@ -21,13 +20,11 @@ const AnimatedOption = ({
   icon,
   style,
   labelStyle,
-  setIsOpen,
 }: AnimatedOptionProps) => {
   const { hide } = useOverlayStore();
 
   const router = useRouter();
   const onPress = () => {
-    setIsOpen(false);
     router.push(href);
     hide();
   };
@@ -43,25 +40,25 @@ const AnimatedOption = ({
 };
 
 export const AddButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
+  const isVisibleOverlay = useOverlayStore((state) => state.isVisible);
   const { show, hide } = useOverlayStore();
 
-  const toggleMenu = () => {
-    const toValue = isOpen ? 0 : 1;
-    setIsOpen(!isOpen);
-
-    if (toValue === 1) {
-      show();
-    } else {
-      hide();
-    }
-
+  // Animate when overlay store changes
+  useEffect(() => {
     Animated.spring(animation, {
-      toValue,
+      toValue: isVisibleOverlay ? 1 : 0,
       friction: 10,
       useNativeDriver: true,
     }).start();
+  }, [animation, isVisibleOverlay]);
+
+  const toggleMenu = () => {
+    if (isVisibleOverlay) {
+      hide();
+    } else {
+      show();
+    }
   };
 
   const createAnimatedStyle = (translateY: number) => ({
@@ -127,7 +124,7 @@ export const AddButton = () => {
   return (
     <View style={styles.container}>
       {options.map((option) => (
-        <AnimatedOption key={option.label} {...option} setIsOpen={toggleMenu} />
+        <AnimatedOption key={option.label} {...option} />
       ))}
 
       <Pressable onPress={toggleMenu}>

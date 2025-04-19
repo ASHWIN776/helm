@@ -7,10 +7,10 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useStatementUpload } from "@/hooks/useStatementUpload";
 import { useTransactionStore } from "@/store/transactionStore";
 
@@ -20,7 +20,6 @@ export default function StatementForm() {
   const router = useRouter();
   const { mutate: uploadStatement, isPending } = useStatementUpload();
   const { addBulkTransactions } = useTransactionStore();
-  const navigation = useNavigation();
 
   const handleFilePick = async () => {
     try {
@@ -65,12 +64,6 @@ export default function StatementForm() {
       },
     );
   };
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: "Bank Statement",
-    });
-  }, [navigation]);
 
   return (
     <View style={styles.container}>

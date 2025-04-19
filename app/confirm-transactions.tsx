@@ -6,15 +6,16 @@ import {
   SafeAreaView,
   Alert,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactionStore } from "@/store/transactionStore";
 import { TransactionCard } from "@/components/transaction-card";
 import { theme } from "@/utils/theme";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { TransactionSummary } from "@/components/transaction-summary";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { InlineTransactionEditForm } from "@/components/inline-transaction-edit-form";
@@ -33,6 +34,7 @@ export default function Confirm() {
   const { type } = useLocalSearchParams();
   const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
   const [editTransaction, setEditTransaction] = React.useState<any>(null);
+  const navigation = useNavigation();
 
   const summaryData = React.useMemo(() => {
     if (type === "statement" || type === "text") {
@@ -87,26 +89,29 @@ export default function Confirm() {
     );
   };
 
-  const handleCancel = () => {
-    Alert.alert(
-      "Clear Transactions?",
-      "This will clear all extracted transactions. Are you sure?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Confirm",
-          onPress: () => {
-            clearTransactionStore();
-            router.replace("/");
+  const handleCancel = useCallback(
+    (type: "back" | "cancel") => {
+      Alert.alert(
+        type === "cancel" ? "Clear Transactions?" : "Go Back?",
+        "This will clear all extracted transactions. Are you sure?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
           },
-          style: "destructive",
-        },
-      ],
-    );
-  };
+          {
+            text: "Confirm",
+            onPress: () => {
+              clearTransactionStore();
+              router.back();
+            },
+            style: "destructive",
+          },
+        ],
+      );
+    },
+    [clearTransactionStore],
+  );
 
   // Save edited transaction
   const handleSaveEdit = (transaction: Transaction) => {
@@ -122,6 +127,20 @@ export default function Confirm() {
     setExpandedIndex(null);
     setEditTransaction(null);
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Pressable onPress={() => handleCancel("back")}>
+          <MaterialCommunityIcons
+            name="chevron-left"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+        </Pressable>
+      ),
+    });
+  }, [handleCancel, navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -183,7 +202,7 @@ export default function Confirm() {
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={styles.cancelButton}
-            onPress={handleCancel}
+            onPress={() => handleCancel("cancel")}
             activeOpacity={0.8}
           >
             <Text style={styles.cancelButtonText}>Cancel</Text>

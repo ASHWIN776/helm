@@ -38,13 +38,16 @@ export default function Confirm() {
     if (type === "statement" || type === "text") {
       const income = transactions
         .filter((t) => t.type === "income")
-        .reduce((sum, t) => sum + t.amount, 0);
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
       const expense = transactions
         .filter((t) => t.type === "expense")
-        .reduce((sum, t) => sum + t.amount, 0);
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
       return { income, expense };
     } else {
-      const total = transactions.reduce((sum, t) => sum + t.amount, 0);
+      const total = transactions.reduce(
+        (sum, t) => sum + parseFloat(t.amount),
+        0,
+      );
       return { total };
     }
   }, [transactions, type]);

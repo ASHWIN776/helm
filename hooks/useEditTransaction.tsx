@@ -17,6 +17,7 @@ export function useEditTransaction() {
         method: "PUT",
         body: JSON.stringify({
           ...rest,
+          amount: parseFloat(rest.amount),
         }),
       });
       if (!response.ok) {

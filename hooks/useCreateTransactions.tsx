@@ -12,7 +12,12 @@ export function useCreateTransactions() {
     mutationFn: async (transactions) => {
       const response = await fetch(`${BASE_URL}/api/transactions`, {
         method: "POST",
-        body: JSON.stringify({ transactions }),
+        body: JSON.stringify({
+          transactions: transactions.map((t) => ({
+            ...t,
+            amount: parseFloat(t.amount),
+          })),
+        }),
       });
 
       if (!response.ok) {

@@ -59,7 +59,7 @@ export default function TransactionForm({
   >(
     initialTransaction || {
       date: new Date().toISOString().split("T")[0],
-      amount: 0,
+      amount: "0",
       description: "",
       type: "expense",
     },
@@ -75,6 +75,7 @@ export default function TransactionForm({
       alert("Please fill in all fields");
       return;
     }
+
     if (onSubmit && (transaction as Transaction).id) {
       onSubmit(transaction as Transaction);
       return;
@@ -153,12 +154,12 @@ export default function TransactionForm({
           <Text style={styles.label}>Amount</Text>
           <TextInput
             style={[sharedStyles.input, styles.textInput]}
-            keyboardType="numeric"
-            value={transaction.amount?.toString()}
+            keyboardType="decimal-pad"
+            value={transaction.amount}
             onChangeText={(text) =>
               setTransaction((prev) => ({
                 ...prev,
-                amount: parseFloat(text) || 0,
+                amount: text,
               }))
             }
             placeholder="Enter amount"

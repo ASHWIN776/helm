@@ -62,14 +62,7 @@ export const InlineTransactionEditForm = ({
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.saveButton}
-          onPress={() =>
-            onSave({
-              ...transaction,
-              description,
-              amount: Number(amount),
-              date,
-            })
-          }
+          onPress={() => onSave(transaction)}
         >
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>

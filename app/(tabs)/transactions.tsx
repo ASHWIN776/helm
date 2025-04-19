@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   RefreshControl,
   SafeAreaView,
   StyleSheet,
@@ -71,7 +72,7 @@ export default function Transactions() {
       <View style={styles.container}>
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <Text>Loading...</Text>
+            <ActivityIndicator size="small" color={theme.colors.primary} />
           </View>
         ) : error ? (
           <View style={styles.errorContainer}>

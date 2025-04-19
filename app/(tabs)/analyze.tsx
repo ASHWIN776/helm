@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 import AnalyzeInput from "@/components/analyze-input";
 import AnalyzeIntro from "@/components/analyze-intro";
@@ -27,7 +27,7 @@ export default function Analyze() {
     if (isLoading) {
       return (
         <View style={styles.centerContainer}>
-          <Text>Loading...</Text>
+          <ActivityIndicator size="small" color={theme.colors.primary} />
         </View>
       );
     }

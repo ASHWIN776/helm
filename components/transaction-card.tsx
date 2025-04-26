@@ -63,7 +63,7 @@ export const TransactionCard = ({
           ]}
         >
           {isExpense ? "-" : "+"}
-          {formatCurrency(Math.abs(transaction.amount))}
+          {formatCurrency(Math.abs(+transaction.amount))}
         </Text>
       </View>
     </Pressable>

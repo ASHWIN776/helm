@@ -15,3 +15,24 @@ Analyse your spending the way you want. Built with [Expo](https://expo.dev).
    ```bash
     npx expo start
    ```
+
+## Development Builds
+
+- More info [here](https://kadikraman.github.io/intermediate-react-native-v2-course/docs/development-builds/)
+- Official Docs [here](https://docs.expo.dev/develop/development-builds/create-a-build/)
+
+### Prebuild
+
+This will create a native app for the specified platform.
+
+```bash
+npx expo prebuild --platform ios
+npx expo prebuild --platform android
+```
+
+### Build your native app
+
+```bash
+npx expo run:ios
+npx expo run:android
+```

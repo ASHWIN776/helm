@@ -13,7 +13,7 @@ interface Props {
 type TabType = "list" | "chart";
 
 export default function AnalysisResult({ data }: Props) {
-  const [activeTab, setActiveTab] = useState<TabType>("list");
+  const [activeTab, setActiveTab] = useState<TabType>("chart");
 
   const listHeaders = useMemo(() => {
     if (data.results && data.results.length > 0) {
@@ -34,19 +34,6 @@ export default function AnalysisResult({ data }: Props) {
       <Text style={styles.chartTitle}>{data.chartConfig?.title}</Text>
       <View style={styles.tabContainer}>
         <Pressable
-          style={[styles.tab, activeTab === "list" && styles.activeTab]}
-          onPress={() => setActiveTab("list")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              activeTab === "list" && styles.activeTabText,
-            ]}
-          >
-            List
-          </Text>
-        </Pressable>
-        <Pressable
           style={[styles.tab, activeTab === "chart" && styles.activeTab]}
           onPress={() => setActiveTab("chart")}
         >
@@ -57,6 +44,19 @@ export default function AnalysisResult({ data }: Props) {
             ]}
           >
             Chart
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[styles.tab, activeTab === "list" && styles.activeTab]}
+          onPress={() => setActiveTab("list")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === "list" && styles.activeTabText,
+            ]}
+          >
+            List
           </Text>
         </Pressable>
       </View>

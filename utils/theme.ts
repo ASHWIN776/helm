@@ -20,6 +20,7 @@ export const theme = {
     card: {
       background: "#FFFFFF",
       border: "#E5E7EB",
+      footer: "#F3F4F6",
     },
     input: {
       border: "#ddd",

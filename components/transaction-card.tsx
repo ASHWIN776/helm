@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../utils/theme";
 import { Transaction } from "@/utils/types";
-import { formatCurrency } from "@/utils/helpers";
+import { formatCurrency, formatTransactionDate } from "@/utils/helpers";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -35,35 +35,49 @@ export const TransactionCard = ({
   const isExpense = transaction.type === "expense";
   return (
     <Pressable
-      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
       onPress={onPress}
+      style={({ pressed }) => [pressed && styles.pressed]}
     >
-      <View style={styles.iconContainer}>
-        <MaterialCommunityIcons
-          name="food"
-          size={24}
-          color={theme.colors.primary}
-        />
+      <View style={styles.mainContainer}>
+        <View style={styles.rowContainer}>
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons
+              name="food"
+              size={24}
+              color={theme.colors.primary}
+            />
+          </View>
+          <View style={styles.contentContainer}>
+            <Text style={styles.title} numberOfLines={1}>
+              {transaction.description}
+            </Text>
+            <Text style={styles.subtitle} numberOfLines={1}>
+              Food
+            </Text>
+          </View>
+          <View style={styles.amountContainer}>
+            <Text
+              style={[
+                styles.amount,
+                {
+                  color: isExpense
+                    ? theme.colors.transaction.expense
+                    : theme.colors.transaction.income,
+                },
+              ]}
+            >
+              {isExpense ? "-" : "+"}
+              {formatCurrency(Math.abs(+transaction.amount))}
+            </Text>
+          </View>
+        </View>
       </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.title} numberOfLines={1}>
-          {transaction.description}
+      <View style={styles.footerExtension}>
+        <Text style={styles.footerText} numberOfLines={1}>
+          {formatTransactionDate(transaction.date)}
         </Text>
-        <Text style={styles.date}>{transaction.date}</Text>
-      </View>
-      <View style={styles.amountContainer}>
-        <Text
-          style={[
-            styles.amount,
-            {
-              color: isExpense
-                ? theme.colors.transaction.expense
-                : theme.colors.transaction.income,
-            },
-          ]}
-        >
-          {isExpense ? "-" : "+"}
-          {formatCurrency(Math.abs(+transaction.amount))}
+        <Text style={styles.footerText} numberOfLines={1}>
+          {transaction.merchant || ""}
         </Text>
       </View>
     </Pressable>
@@ -71,15 +85,22 @@ export const TransactionCard = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: theme.spacing.md,
+  mainContainer: {
     backgroundColor: theme.colors.card.background,
-    borderRadius: theme.borderRadius.md,
+    borderTopLeftRadius: theme.borderRadius.md,
+    borderTopRightRadius: theme.borderRadius.md,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     borderWidth: 1,
     borderColor: theme.colors.card.border,
-    marginBottom: theme.spacing.sm,
+    marginBottom: 0,
+    padding: theme.spacing.md,
+    rowGap: theme.spacing.md,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   pressed: {
     opacity: 0.7,
@@ -101,7 +122,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: theme.colors.text.primary,
   },
-  date: {
+  subtitle: {
     fontSize: 13,
     color: theme.colors.text.secondary,
     marginTop: 2,
@@ -114,5 +135,27 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  footerExtension: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: theme.colors.card.footer,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+    borderBottomLeftRadius: theme.borderRadius.md,
+    borderBottomRightRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderTopWidth: 0,
+    borderColor: theme.colors.card.border,
+    marginBottom: theme.spacing.sm,
+  },
+  footerText: {
+    fontSize: 12,
+    color: theme.colors.text.secondary,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

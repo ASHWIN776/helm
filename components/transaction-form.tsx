@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Pressable,
 } from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
@@ -62,6 +63,7 @@ export default function TransactionForm({
       amount: "0",
       description: "",
       type: "expense",
+      merchant: "",
     },
   );
   const router = useRouter();
@@ -71,7 +73,7 @@ export default function TransactionForm({
 
   const handleSubmit = () => {
     if (!transaction.date || !transaction.amount || !transaction.description) {
-      alert("Please fill in all fields");
+      alert("Please fill the required fields");
       return;
     }
 
@@ -161,6 +163,22 @@ export default function TransactionForm({
         </View>
 
         <View style={styles.formSection}>
+          <Text style={styles.label}>Shop Name</Text>
+          <TextInput
+            style={[sharedStyles.input, styles.textInput]}
+            value={transaction.merchant}
+            onChangeText={(text) =>
+              setTransaction((prev) => ({
+                ...prev,
+                merchant: text,
+              }))
+            }
+            placeholder="Enter shop name"
+            placeholderTextColor={theme.colors.text.secondary}
+          />
+        </View>
+
+        <View style={styles.formSection}>
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={[sharedStyles.input, styles.textInput, styles.textArea]}
@@ -181,10 +199,11 @@ export default function TransactionForm({
         <View style={styles.formSection}>
           <Text style={styles.label}>Type</Text>
           <View style={styles.typeContainer}>
-            <TouchableOpacity
+            <Pressable
               style={[
                 styles.typeButton,
-                transaction.type === "expense" && styles.typeButtonActive,
+                transaction.type === "expense" &&
+                  styles.typeButtonExpenseActive,
               ]}
               onPress={() =>
                 setTransaction((prev) => ({ ...prev, type: "expense" }))
@@ -193,16 +212,17 @@ export default function TransactionForm({
               <Text
                 style={[
                   styles.typeButtonText,
-                  transaction.type === "expense" && styles.typeButtonTextActive,
+                  transaction.type === "expense" &&
+                    styles.typeButtonExpenseTextActive,
                 ]}
               >
                 Expense
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               style={[
                 styles.typeButton,
-                transaction.type === "income" && styles.typeButtonActive,
+                transaction.type === "income" && styles.typeButtonIncomeActive,
               ]}
               onPress={() =>
                 setTransaction((prev) => ({ ...prev, type: "income" }))
@@ -211,12 +231,13 @@ export default function TransactionForm({
               <Text
                 style={[
                   styles.typeButtonText,
-                  transaction.type === "income" && styles.typeButtonTextActive,
+                  transaction.type === "income" &&
+                    styles.typeButtonIncomeTextActive,
                 ]}
               >
                 Income
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
@@ -289,22 +310,29 @@ const styles = StyleSheet.create({
   typeButton: {
     flex: 1,
     padding: 12,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: theme.colors.input.border,
     alignItems: "center",
   },
-  typeButtonActive: {
-    backgroundColor: theme.colors.primary,
-    borderColor: theme.colors.primary,
+  typeButtonExpenseActive: {
+    backgroundColor: theme.colors.red + "22",
+    borderColor: theme.colors.red,
+  },
+  typeButtonIncomeActive: {
+    backgroundColor: theme.colors.green + "22",
+    borderColor: theme.colors.green,
+  },
+  typeButtonExpenseTextActive: {
+    color: theme.colors.red,
+  },
+  typeButtonIncomeTextActive: {
+    color: theme.colors.green,
   },
   typeButtonText: {
     fontSize: 16,
     color: theme.colors.text.primary,
     fontWeight: "500",
-  },
-  typeButtonTextActive: {
-    color: "white",
   },
   submitButton: {
     backgroundColor: theme.colors.primary,

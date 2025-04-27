@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -16,33 +16,76 @@ export interface InlineTransactionEditFormProps {
 }
 
 export const InlineTransactionEditForm = ({
-  transaction,
+  transaction: initialTransaction,
   onSave,
   onCancel,
 }: InlineTransactionEditFormProps) => {
-  const [description, setDescription] = React.useState(
-    transaction?.description || "",
-  );
-  const [amount, setAmount] = React.useState(
-    transaction?.amount?.toString() || "",
-  );
-  const [date, setDate] = React.useState(transaction?.date || "");
+  const [transaction, setTransaction] =
+    useState<Transaction>(initialTransaction);
 
   return (
     <View style={styles.editContainer}>
       <Text style={styles.editTitle}>Edit Transaction</Text>
       <TextInput
         style={styles.input}
-        value={description}
-        onChangeText={setDescription}
+        value={transaction.description}
+        onChangeText={(description) =>
+          setTransaction({ ...transaction, description })
+        }
         placeholder="Description"
+      />
+      <View style={styles.typeContainer}>
+        <TouchableOpacity
+          style={[
+            styles.typeButton,
+            transaction.type === "expense" && styles.typeButtonExpenseActive,
+          ]}
+          onPress={() => setTransaction({ ...transaction, type: "expense" })}
+        >
+          <Text
+            style={[
+              styles.typeButtonText,
+              transaction.type === "expense" &&
+                styles.typeButtonExpenseTextActive,
+            ]}
+          >
+            Expense
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.typeButton,
+            transaction.type === "income" && styles.typeButtonIncomeActive,
+          ]}
+          onPress={() => setTransaction({ ...transaction, type: "income" })}
+        >
+          <Text
+            style={[
+              styles.typeButtonText,
+              transaction.type === "income" &&
+                styles.typeButtonIncomeTextActive,
+            ]}
+          >
+            Income
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <TextInput
+        style={styles.input}
+        value={transaction.merchant}
+        onChangeText={(merchant) =>
+          setTransaction({ ...transaction, merchant })
+        }
+        placeholder="Merchant"
       />
       <View style={styles.inputRow}>
         <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
-            value={amount}
-            onChangeText={setAmount}
+            value={transaction.amount.toString()}
+            onChangeText={(amount) =>
+              setTransaction({ ...transaction, amount })
+            }
             placeholder="Amount"
             keyboardType="numeric"
           />
@@ -50,8 +93,8 @@ export const InlineTransactionEditForm = ({
         <View style={{ flex: 1 }}>
           <TextInput
             style={styles.input}
-            value={date}
-            onChangeText={setDate}
+            value={transaction.date}
+            onChangeText={(date) => setTransaction({ ...transaction, date })}
             placeholder="Date"
           />
         </View>
@@ -99,6 +142,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     marginBottom: theme.spacing.sm,
+  },
+  typeContainer: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: theme.spacing.sm,
+  },
+  typeButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.input.border,
+    alignItems: "center",
+  },
+  typeButtonExpenseActive: {
+    backgroundColor: theme.colors.red + "22", // light red background
+    borderColor: theme.colors.red,
+  },
+  typeButtonIncomeActive: {
+    backgroundColor: theme.colors.green + "22", // light green background
+    borderColor: theme.colors.green,
+  },
+  typeButtonExpenseTextActive: {
+    color: theme.colors.red,
+  },
+  typeButtonIncomeTextActive: {
+    color: theme.colors.green,
+  },
+  typeButtonText: {
+    color: theme.colors.text.primary,
+    fontWeight: "500",
   },
   buttonRow: {
     flexDirection: "row",

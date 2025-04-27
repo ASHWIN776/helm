@@ -27,6 +27,7 @@ export const InlineTransactionEditForm = ({
     transaction?.amount?.toString() || "",
   );
   const [date, setDate] = React.useState(transaction?.date || "");
+  const [merchant, setMerchant] = React.useState(transaction?.merchant || "");
 
   return (
     <View style={styles.editContainer}>
@@ -36,6 +37,12 @@ export const InlineTransactionEditForm = ({
         value={description}
         onChangeText={setDescription}
         placeholder="Description"
+      />
+      <TextInput
+        style={styles.input}
+        value={merchant}
+        onChangeText={setMerchant}
+        placeholder="Merchant"
       />
       <View style={styles.inputRow}>
         <View style={{ flex: 1 }}>
@@ -62,7 +69,9 @@ export const InlineTransactionEditForm = ({
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.saveButton}
-          onPress={() => onSave(transaction)}
+          onPress={() =>
+            onSave({ ...transaction, description, amount, merchant, date })
+          }
         >
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>

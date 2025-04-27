@@ -70,23 +70,25 @@ export default function Confirm() {
   };
 
   const handleSubmit = () => {
-    Alert.alert(
-      "Save Transactions?",
-      `This will save all ${transactions.length} extracted transactions. Are you sure?`,
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
+    const transactionsCount = transactions.length;
+    const descriptionBody =
+      transactionsCount > 1
+        ? `This will save ${transactionsCount} extracted transactions. Are you sure?`
+        : `This will save the extracted transaction. Are you sure?`;
+
+    Alert.alert("Confirm Save?", descriptionBody, [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Confirm",
+        onPress: () => {
+          handleConfirm();
         },
-        {
-          text: "Confirm",
-          onPress: () => {
-            handleConfirm();
-          },
-          style: "default",
-        },
-      ],
-    );
+        style: "default",
+      },
+    ]);
   };
 
   const handleCancel = useCallback(

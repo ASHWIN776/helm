@@ -62,6 +62,7 @@ export default function TransactionForm({
       amount: "0",
       description: "",
       type: "expense",
+      merchant: "",
     },
   );
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function TransactionForm({
 
   const handleSubmit = () => {
     if (!transaction.date || !transaction.amount || !transaction.description) {
-      alert("Please fill in all fields");
+      alert("Please fill the required fields");
       return;
     }
 
@@ -156,6 +157,22 @@ export default function TransactionForm({
               }))
             }
             placeholder="Enter amount"
+            placeholderTextColor={theme.colors.text.secondary}
+          />
+        </View>
+
+        <View style={styles.formSection}>
+          <Text style={styles.label}>Shop Name</Text>
+          <TextInput
+            style={[sharedStyles.input, styles.textInput]}
+            value={transaction.merchant}
+            onChangeText={(text) =>
+              setTransaction((prev) => ({
+                ...prev,
+                merchant: text,
+              }))
+            }
+            placeholder="Enter shop name"
             placeholderTextColor={theme.colors.text.secondary}
           />
         </View>

@@ -3,18 +3,22 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
   TextInput,
-  TouchableOpacity,
 } from "react-native";
 
 interface Props {
   message: string;
   onChange: (message: string) => void;
   onSubmit: () => void;
+  isLoading?: boolean;
 }
 
-export default function AnalyzeInput({ message, onChange, onSubmit }: Props) {
+export default function AnalyzeInput({
+  message,
+  onChange,
+  onSubmit,
+  isLoading,
+}: Props) {
   return (
     <KeyboardAvoidingView
       style={styles.inputContainer}
@@ -25,16 +29,15 @@ export default function AnalyzeInput({ message, onChange, onSubmit }: Props) {
         style={styles.input}
         value={message}
         onChangeText={onChange}
-        placeholder="Enter your message..."
+        multiline
+        numberOfLines={3}
+        placeholder="Ask about your finances"
         placeholderTextColor={theme.colors.text.secondary}
+        editable={!isLoading}
+        onSubmitEditing={onSubmit}
+        submitBehavior="submit"
+        returnKeyType="send"
       />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onSubmit}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.buttonText}>Go</Text>
-      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
   input: {
     ...sharedStyles.input,
     flex: 1,
-    height: 46,
+    height: 80,
   },
   button: {
     backgroundColor: theme.colors.primary,
@@ -58,6 +61,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
   buttonText: {
     color: theme.colors.white,

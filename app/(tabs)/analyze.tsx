@@ -52,6 +52,7 @@ export default function Analyze() {
         message={message}
         onChange={setMessage}
         onSubmit={handleSubmit}
+        isLoading={isLoading}
       />
       <StatusBar style="dark" />
     </View>

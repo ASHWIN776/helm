@@ -32,6 +32,7 @@ export interface AnalysisResponse {
   message: string;
   results: Result[];
   chartConfig: ChartConfig | null;
+  insight: string;
   thinking: {
     sql: string;
   };

@@ -32,6 +32,14 @@ export default function AnalysisResult({ data }: Props) {
       contentContainerStyle={styles.contentContainer}
     >
       <Text style={styles.chartTitle}>{data.chartConfig?.title}</Text>
+      <Text style={styles.chartDescription}>
+        Here's what you are looking for,
+      </Text>
+      {data.insight ? (
+        <View style={styles.insightCard}>
+          <Text style={styles.insightText}>{data.insight}</Text>
+        </View>
+      ) : undefined}
       <View style={styles.tabContainer}>
         <Pressable
           style={[styles.tab, activeTab === "chart" && styles.activeTab]}
@@ -141,5 +149,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: theme.colors.text.secondary,
     lineHeight: 24,
+  },
+  insightCard: {
+    justifyContent: "space-between",
+    backgroundColor: theme.colors.card.background,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    borderWidth: 1,
+    borderColor: theme.colors.card.border,
+  },
+  insightCardTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: theme.colors.text.secondary,
+    marginBottom: 4,
+    textAlign: "center",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+  },
+  insightText: {
+    color: theme.colors.text.primary,
+    fontSize: 16,
+    lineHeight: 20,
   },
 });

@@ -16,23 +16,24 @@ export default function LastMonthComparison({
   const percent = (diff / lastMonth) * 100;
   const isIncrease = diff > 0;
 
-  const Arrow = () => (
-    <View
-      style={[
-        styles.arrowContainer,
-        {
-          backgroundColor: isIncrease ? theme.colors.red : theme.colors.green,
-        },
-      ]}
-    >
-      <Text style={styles.arrow}>{isIncrease ? "\u2191" : "\u2193"}</Text>
-    </View>
-  );
+  // const Arrow = () => (
+  //   <View
+  //     style={[
+  //       styles.arrowContainer,
+  //       {
+  //         backgroundColor: isIncrease ? theme.colors.red : theme.colors.green,
+  //       },
+  //     ]}
+  //   >
+  //     <Text style={styles.arrow}>{isIncrease ? "\u2191" : "\u2193"}</Text>
+  //   </View>
+  // );
 
   return (
     <View style={styles.container}>
       <Text style={styles.secondaryText}>Expenses at</Text>
-      <Arrow />
+      {/* For now without arrow looks better */}
+      {/* <Arrow /> */}
       <Text
         style={[
           styles.text,

@@ -9,6 +9,7 @@ interface DashboardDataResponse {
       today: number;
       week: number;
       month: number;
+      lastMonthTillToday: number;
     };
     income: {
       today: number;

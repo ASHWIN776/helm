@@ -12,6 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useCallback } from "react";
 import { formatCurrency } from "@/utils/helpers";
+import LastMonthComparison from "@/components/last-month-comparison";
 
 export default function Index() {
   const { data: dashboardData, isLoading, error, refetch } = useDashboardData();
@@ -103,6 +104,10 @@ export default function Index() {
               </Text>
             </View>
           </View>
+          <LastMonthComparison
+            current={expense.month}
+            lastMonth={expense.lastMonthTillToday}
+          />
         </View>
       </ScrollView>
     );

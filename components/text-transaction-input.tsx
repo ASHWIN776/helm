@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: 8,
+    marginBottom: theme.spacing.md,
   },
   submitButtonDisabled: {
     opacity: 0.7,

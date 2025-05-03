@@ -43,7 +43,7 @@ export default function StatementForm() {
 
   const handleSubmit = async () => {
     if (!selectedFile || !selectedFile.assets || !selectedFile.assets[0].uri) {
-      console.log("Please select a CSV file first");
+      console.error("Please select a CSV file first");
       return;
     }
 
@@ -55,11 +55,11 @@ export default function StatementForm() {
             addBulkTransactions(data.transactions);
             router.replace("/confirm-name");
           } else {
-            console.log("No transactions found in the statement");
+            console.error("No transactions found in the statement");
           }
         },
         onError: (error) => {
-          console.log(error.message);
+          console.error(error.message);
         },
       },
     );

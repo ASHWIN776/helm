@@ -47,7 +47,7 @@ export default function ReceiptForm() {
 
   const handleSubmit = () => {
     if (!selectedImage) {
-      console.log("Please select a receipt image first");
+      console.error("Please select a receipt image first");
       return;
     }
 
@@ -56,15 +56,14 @@ export default function ReceiptForm() {
       {
         onSuccess: (data) => {
           if (data.transactions) {
-            console.log("Extracted Transactions:", data.transactions);
             addBulkTransactions(data.transactions);
             router.replace("/confirm-transactions?type=receipt");
           } else {
-            console.log("No transactions found in the receipt");
+            console.error("No transactions found in the receipt");
           }
         },
         onError: (error) => {
-          console.log(error.message);
+          console.error(error.message);
         },
       },
     );

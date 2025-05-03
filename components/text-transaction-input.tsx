@@ -34,7 +34,7 @@ export default function TextTransactionInput() {
           }
         },
         onError: (error) => {
-          console.log("Error:", error);
+          console.error("Error:", error);
           alert(
             error.message ||
               "Failed to extract transactions. Please try again.",

@@ -31,71 +31,79 @@ export default function AnalysisResult({ data }: Props) {
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     >
-      <Text style={styles.chartTitle}>{data.chartConfig?.title}</Text>
-      <Text style={styles.chartDescription}>
-        Here's what you are looking for,
-      </Text>
-      {data.insight ? (
-        <View style={styles.insightCard}>
-          <Text style={styles.insightText}>{data.insight}</Text>
-        </View>
-      ) : undefined}
-      <View style={styles.tabContainer}>
-        <Pressable
-          style={[styles.tab, activeTab === "chart" && styles.activeTab]}
-          onPress={() => setActiveTab("chart")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              activeTab === "chart" && styles.activeTabText,
-            ]}
-          >
-            Chart
+      {data.results.length > 0 ? (
+        <>
+          <Text style={styles.chartTitle}>{data.chartConfig?.title}</Text>
+          <Text style={styles.chartDescription}>
+            Here's what you are looking for,
           </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.tab, activeTab === "list" && styles.activeTab]}
-          onPress={() => setActiveTab("list")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              activeTab === "list" && styles.activeTabText,
-            ]}
-          >
-            List
-          </Text>
-        </Pressable>
-      </View>
+          {data.insight ? (
+            <View style={styles.insightCard}>
+              <Text style={styles.insightText}>{data.insight}</Text>
+            </View>
+          ) : undefined}
+          <View style={styles.tabContainer}>
+            <Pressable
+              style={[styles.tab, activeTab === "chart" && styles.activeTab]}
+              onPress={() => setActiveTab("chart")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "chart" && styles.activeTabText,
+                ]}
+              >
+                Chart
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[styles.tab, activeTab === "list" && styles.activeTab]}
+              onPress={() => setActiveTab("list")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "list" && styles.activeTabText,
+                ]}
+              >
+                List
+              </Text>
+            </Pressable>
+          </View>
 
-      {activeTab === "list" ? (
-        <View style={styles.listContainer}>
-          <FlashList
-            data={data.results}
-            renderItem={renderResultCard}
-            estimatedItemSize={150}
-            keyExtractor={(_, index) => index.toString()}
-            contentContainerStyle={styles.listContent}
-          />
-        </View>
+          {activeTab === "list" ? (
+            <View style={styles.listContainer}>
+              <FlashList
+                data={data.results}
+                renderItem={renderResultCard}
+                estimatedItemSize={150}
+                keyExtractor={(_, index) => index.toString()}
+                contentContainerStyle={styles.listContent}
+              />
+            </View>
+          ) : (
+            data.chartConfig && (
+              <>
+                <Text style={styles.chartDescription}>
+                  {data.chartConfig?.takeaway}
+                </Text>
+                <DynamicChart
+                  data={{
+                    results: data.results,
+                    chartConfig: data.chartConfig,
+                  }}
+                />
+                <Text style={styles.chartDescription}>
+                  {data.chartConfig?.description}
+                </Text>
+              </>
+            )
+          )}
+        </>
       ) : (
-        data.chartConfig && (
-          <>
-            <Text style={styles.chartDescription}>
-              {data.chartConfig?.takeaway}
-            </Text>
-            <DynamicChart
-              data={{
-                results: data.results,
-                chartConfig: data.chartConfig,
-              }}
-            />
-            <Text style={styles.chartDescription}>
-              {data.chartConfig?.description}
-            </Text>
-          </>
-        )
+        <Text style={[styles.chartDescription, { color: theme.colors.red }]}>
+          {data.message}
+        </Text>
       )}
     </ScrollView>
   );

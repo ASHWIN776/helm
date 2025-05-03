@@ -37,3 +37,5 @@ export interface AnalysisResponse {
     sql: string;
   };
 }
+
+export type ImportType = "statement" | "receipt" | "text";

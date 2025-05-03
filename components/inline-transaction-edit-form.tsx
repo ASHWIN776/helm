@@ -7,18 +7,20 @@ import {
   StyleSheet,
 } from "react-native";
 import { theme } from "@/utils/theme";
-import { Transaction } from "@/utils/types";
+import { Transaction, ImportType } from "@/utils/types";
 
 export interface InlineTransactionEditFormProps {
   transaction: Transaction;
   onSave: (transaction: Transaction) => void;
   onCancel: () => void;
+  importType?: ImportType;
 }
 
 export const InlineTransactionEditForm = ({
   transaction: initialTransaction,
   onSave,
   onCancel,
+  importType,
 }: InlineTransactionEditFormProps) => {
   const [transaction, setTransaction] =
     useState<Transaction>(initialTransaction);
@@ -70,14 +72,16 @@ export const InlineTransactionEditForm = ({
           </Text>
         </TouchableOpacity>
       </View>
-      <TextInput
-        style={styles.input}
-        value={transaction.merchant}
-        onChangeText={(merchant) =>
-          setTransaction({ ...transaction, merchant })
-        }
-        placeholder="Merchant"
-      />
+      {importType === "statement" ? undefined : (
+        <TextInput
+          style={styles.input}
+          value={transaction.merchant}
+          onChangeText={(merchant) =>
+            setTransaction({ ...transaction, merchant })
+          }
+          placeholder="Merchant"
+        />
+      )}
       <View style={styles.inputRow}>
         <View style={{ flex: 1 }}>
           <TextInput

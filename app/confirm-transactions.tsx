@@ -19,7 +19,7 @@ import React, { useCallback, useEffect } from "react";
 import { TransactionSummary } from "@/components/transaction-summary";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { InlineTransactionEditForm } from "@/components/inline-transaction-edit-form";
-import { Transaction } from "@/utils/types";
+import { ImportType, Transaction } from "@/utils/types";
 
 export default function Confirm() {
   const transactions = useTransactionStore((state) => state.transactions);
@@ -31,7 +31,7 @@ export default function Confirm() {
     (state) => state.clearStore,
   );
   const { mutate: createTransactions, isPending } = useCreateTransactions();
-  const { type } = useLocalSearchParams();
+  const { type }: { type: ImportType } = useLocalSearchParams();
   const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
   const [editTransaction, setEditTransaction] = React.useState<any>(null);
   const navigation = useNavigation();
@@ -130,6 +130,18 @@ export default function Confirm() {
     setEditTransaction(null);
   };
 
+  // Handler to update merchant/shop name for the all transactions
+  const handleMerchantChange = (newMerchant: string) => {
+    if (transactions.length > 0) {
+      transactions.forEach((transaction) => {
+        editTransactionInStore(transaction.id, {
+          ...transaction,
+          merchant: newMerchant,
+        });
+      });
+    }
+  };
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -149,6 +161,10 @@ export default function Confirm() {
       <TransactionSummary
         type={type as "statement" | "receipt" | "text"}
         summaryData={summaryData}
+        merchant={
+          transactions.length > 0 ? transactions[0].merchant : undefined
+        }
+        onMerchantChange={handleMerchantChange}
       />
       <View style={styles.listContainer}>
         <View style={styles.listHeader}>
@@ -191,6 +207,7 @@ export default function Confirm() {
                   transaction={editTransaction}
                   onSave={handleSaveEdit}
                   onCancel={handleCancelEdit}
+                  importType={type}
                 />
               ) : null}
             </View>

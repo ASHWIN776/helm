@@ -3,7 +3,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 
 interface Props {
@@ -29,15 +31,17 @@ export default function AnalyzeInput({
         style={styles.input}
         value={message}
         onChangeText={onChange}
-        multiline
-        numberOfLines={3}
-        placeholder="Ask about your finances"
+        placeholder="Ask about your finances..."
         placeholderTextColor={theme.colors.text.secondary}
-        editable={!isLoading}
-        onSubmitEditing={onSubmit}
-        submitBehavior="submit"
-        returnKeyType="send"
       />
+      <TouchableOpacity
+        disabled={isLoading}
+        style={[styles.button, isLoading && styles.buttonDisabled]}
+        onPress={onSubmit}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.buttonText}>Go</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
   input: {
     ...sharedStyles.input,
     flex: 1,
-    height: 80,
+    height: 46,
   },
   button: {
     backgroundColor: theme.colors.primary,

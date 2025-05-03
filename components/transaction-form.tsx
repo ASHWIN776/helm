@@ -163,7 +163,7 @@ export default function TransactionForm({
         </View>
 
         <View style={styles.formSection}>
-          <Text style={styles.label}>Shop Name</Text>
+          <Text style={styles.label}>Shop</Text>
           <TextInput
             style={[sharedStyles.input, styles.textInput]}
             value={transaction.merchant}
@@ -179,11 +179,9 @@ export default function TransactionForm({
         </View>
 
         <View style={styles.formSection}>
-          <Text style={styles.label}>Description</Text>
+          <Text style={styles.label}>Commodity</Text>
           <TextInput
-            style={[sharedStyles.input, styles.textInput, styles.textArea]}
-            multiline
-            numberOfLines={4}
+            style={[sharedStyles.input, styles.textInput]}
             value={transaction.description}
             onChangeText={(text) =>
               setTransaction((prev) => ({
@@ -191,7 +189,7 @@ export default function TransactionForm({
                 description: text,
               }))
             }
-            placeholder="Enter description"
+            placeholder="Enter name of the commodity"
             placeholderTextColor={theme.colors.text.secondary}
           />
         </View>
@@ -297,11 +295,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 46,
-  },
-  textArea: {
-    minHeight: 100,
-    height: "auto",
-    textAlignVertical: "top",
   },
   typeContainer: {
     flexDirection: "row",

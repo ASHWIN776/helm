@@ -5,16 +5,37 @@ interface DashboardDataResponse {
   error: boolean;
   message: string;
   data: {
-    expense: {
-      today: number;
-      week: number;
-      month: number;
-      lastMonthTillToday: number;
+    today: {
+      income: number;
+      expense: number;
+      range: {
+        start: string;
+        end: string;
+      };
     };
-    income: {
-      today: number;
-      week: number;
-      month: number;
+    week: {
+      income: number;
+      expense: number;
+      range: {
+        start: string;
+        end: string;
+      };
+    };
+    month: {
+      income: number;
+      expense: number;
+      range: {
+        start: string;
+        end: string;
+      };
+    };
+    lastMonthTillToday: {
+      income: number;
+      expense: number;
+      range: {
+        start: string;
+        end: string;
+      };
     };
   } | null;
 }

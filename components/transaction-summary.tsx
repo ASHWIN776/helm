@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "@/utils/theme";
-import { formatCurrency } from "@/utils/helpers";
+import { formatCurrency, string_clamp } from "@/utils/helpers";
 
 type TransactionSummaryProps = {
   type: "statement" | "receipt" | "text";
@@ -44,7 +44,7 @@ export function TransactionSummary({
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>Shop</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.summaryValue}>{merchant}</Text>
+            <Text style={styles.summaryValue}>{string_clamp(merchant)}</Text>
             {onMerchantChange && (
               <TouchableOpacity
                 onPress={() => {

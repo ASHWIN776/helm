@@ -3,7 +3,11 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../utils/theme";
 import { Transaction } from "@/utils/types";
-import { formatCurrency, formatTransactionDate } from "@/utils/helpers";
+import {
+  formatCurrency,
+  formatTransactionDate,
+  string_clamp,
+} from "@/utils/helpers";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -77,7 +81,7 @@ export const TransactionCard = ({
           {formatTransactionDate(transaction.date)}
         </Text>
         <Text style={styles.footerText} numberOfLines={1}>
-          {transaction.merchant || ""}
+          {string_clamp(transaction.merchant || "")}
         </Text>
       </View>
     </Pressable>

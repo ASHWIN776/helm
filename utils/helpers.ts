@@ -21,3 +21,10 @@ export function formatTransactionDate(dateString: string): string {
 
   return format(date, "MMM d, yyyy");
 }
+
+export function string_clamp(value: string, maxLength: number = 20): string {
+  if (value.length > maxLength) {
+    return value.slice(0, maxLength) + "...";
+  }
+  return value;
+}

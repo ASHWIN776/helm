@@ -13,7 +13,7 @@ export default function LastMonthComparison({
 }: LastMonthComparisonProps) {
   if (!(lastMonth > 0)) return null;
   const diff = current - lastMonth;
-  const percent = (diff / lastMonth) * 100;
+  const percent = (diff / current) * 100;
   const isIncrease = diff > 0;
 
   // const Arrow = () => (

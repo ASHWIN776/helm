@@ -13,6 +13,7 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { useCallback } from "react";
 import { formatCurrency } from "@/utils/helpers";
 import LastMonthComparison from "@/components/last-month-comparison";
+import { format } from "date-fns";
 
 export default function Index() {
   const { data: dashboardData, isLoading, error, refetch } = useDashboardData();
@@ -42,7 +43,10 @@ export default function Index() {
       );
     }
 
-    const { income, expense } = dashboardData.data;
+    const { today, week, month, lastMonthTillToday } = dashboardData.data;
+    const todayTitle = format(today.range.start, "MMM d, yyyy");
+    const weekRange = `${format(week.range.start, "MMM d")} - ${format(week.range.end, "MMM d, yyyy")}`;
+    const monthTitle = format(month.range.start, "MMMM yyyy");
 
     return (
       <ScrollView
@@ -53,61 +57,72 @@ export default function Index() {
         contentContainerStyle={styles.scrollContent}
       >
         <View style={styles.summaryContainer}>
-          <Text style={styles.periodTitle}>Today</Text>
+          <View style={styles.periodContainer}>
+            <Text style={styles.periodTitle}>Today</Text>
+            <Text style={styles.periodSubtitle}>{todayTitle}</Text>
+          </View>
           <View style={styles.summaryContent}>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Income</Text>
               <Text style={[styles.summaryValue, styles.inflowText]}>
-                {formatCurrency(income.today)}
+                {formatCurrency(today.income)}
               </Text>
             </View>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Expense</Text>
               <Text style={[styles.summaryValue, styles.outflowText]}>
-                {formatCurrency(expense.today)}
+                {formatCurrency(today.expense)}
               </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.summaryContainer}>
-          <Text style={styles.periodTitle}>This Week</Text>
+          <View style={styles.periodContainer}>
+            <Text style={styles.periodTitle}>This Week</Text>
+            <Text style={styles.periodSubtitle}>{weekRange}</Text>
+          </View>
           <View style={styles.summaryContent}>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Income</Text>
               <Text style={[styles.summaryValue, styles.inflowText]}>
-                {formatCurrency(income.week)}
+                {formatCurrency(week.income)}
               </Text>
             </View>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Expense</Text>
               <Text style={[styles.summaryValue, styles.outflowText]}>
-                {formatCurrency(expense.week)}
+                {formatCurrency(week.expense)}
               </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.summaryContainer}>
-          <Text style={styles.periodTitle}>This Month</Text>
-          <View style={styles.summaryContent}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Income</Text>
-              <Text style={[styles.summaryValue, styles.inflowText]}>
-                {formatCurrency(income.month)}
-              </Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Expense</Text>
-              <Text style={[styles.summaryValue, styles.outflowText]}>
-                {formatCurrency(expense.month)}
-              </Text>
-            </View>
+          <View style={styles.periodContainer}>
+            <Text style={styles.periodTitle}>This Month</Text>
+            <Text style={styles.periodSubtitle}>{monthTitle}</Text>
           </View>
-          <LastMonthComparison
-            current={expense.month}
-            lastMonth={expense.lastMonthTillToday}
-          />
+          <View>
+            <View style={styles.summaryContent}>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryLabel}>Income</Text>
+                <Text style={[styles.summaryValue, styles.inflowText]}>
+                  {formatCurrency(month.income)}
+                </Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryLabel}>Expense</Text>
+                <Text style={[styles.summaryValue, styles.outflowText]}>
+                  {formatCurrency(month.expense)}
+                </Text>
+              </View>
+            </View>
+            <LastMonthComparison
+              current={month.expense}
+              lastMonth={lastMonthTillToday.expense}
+            />
+          </View>
         </View>
       </ScrollView>
     );
@@ -157,12 +172,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+    rowGap: theme.spacing.md,
+  },
+  periodContainer: {
+    rowGap: theme.spacing.xs,
   },
   periodTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.md,
+  },
+  periodSubtitle: {
+    fontSize: 13,
+    color: theme.colors.text.secondary,
   },
   summaryContent: {
     flexDirection: "row",

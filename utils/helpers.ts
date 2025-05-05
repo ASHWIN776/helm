@@ -28,3 +28,11 @@ export function string_clamp(value: string, maxLength: number = 20): string {
   }
   return value;
 }
+
+// Capitalizes each word in a string (underscore included)
+export function formatKey(key: string): string {
+  return key
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

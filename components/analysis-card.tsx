@@ -1,27 +1,24 @@
-import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { theme } from "../utils/theme";
+import { formatKey } from "@/utils/helpers";
 
 interface AnalysisCardProps {
   data: Record<string, any>;
   keys: string[];
 }
 
-export const AnalysisCard: React.FC<AnalysisCardProps> = ({ data, keys }) => {
+export function AnalysisCard({ data, keys }: AnalysisCardProps) {
   return (
     <View style={styles.card}>
       {keys.map((key) => (
         <View key={key} style={styles.cardRow}>
-          <Text style={styles.cardLabel}>
-            {key.charAt(0).toUpperCase() +
-              key.slice(1).replace(/([A-Z])/g, " $1")}
-          </Text>
+          <Text style={styles.cardLabel}>{formatKey(key)}</Text>
           <Text style={styles.cardValue}>{data[key]?.toString() || "-"}</Text>
         </View>
       ))}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   card: {

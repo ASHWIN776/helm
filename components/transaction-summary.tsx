@@ -10,9 +10,10 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "@/utils/theme";
 import { formatCurrency, string_clamp } from "@/utils/helpers";
+import { ImportType } from "@/utils/types";
 
 type TransactionSummaryProps = {
-  type: "statement" | "receipt" | "text";
+  type: ImportType;
   summaryData: {
     income?: number;
     expense?: number;
@@ -40,7 +41,7 @@ export function TransactionSummary({
 
   return (
     <View style={styles.summaryContainer}>
-      {merchant ? (
+      {merchant && type === "receipt" ? (
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>Shop</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>

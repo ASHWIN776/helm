@@ -1,6 +1,8 @@
-## fintrack-app
+## helm
 
-Analyse your spending the way you want. Built with [Expo](https://expo.dev).
+Steer your finances with ease.
+
+Built with [Expo](https://expo.dev).
 
 ## Get started
 

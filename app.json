@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "fintrack-app",
-    "slug": "fintrack-app",
+    "name": "helm",
+    "slug": "helm",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.fintrack-app"
+      "bundleIdentifier": "com.anonymous.helm"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.fintrackapp"
+      "package": "com.anonymous.helm"
     },
     "web": {
       "bundler": "metro",

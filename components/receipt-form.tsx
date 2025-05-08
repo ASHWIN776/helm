@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -27,9 +28,7 @@ export default function ReceiptForm() {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissionResult.granted) {
-      alert(
-        "Permission to access camera roll is required! Go to settings > Privacy > Camera and enable it.",
-      );
+      Alert.alert("Permission to access camera roll is required!");
       return;
     }
 
@@ -40,6 +39,23 @@ export default function ReceiptForm() {
       aspect: [16, 9],
     });
 
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0]);
+    }
+  };
+
+  const handleCameraButtonPress = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert("Permission to access camera is required!");
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ["images"],
+      quality: 1,
+      allowsEditing: false,
+      aspect: [16, 9],
+    });
     if (!result.canceled) {
       setSelectedImage(result.assets[0]);
     }
@@ -71,35 +87,56 @@ export default function ReceiptForm() {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ gap: 24 }} style={{ flex: 1 }}>
-        <View style={styles.formSection}>
-          <Text style={styles.label}>Image</Text>
-          <TouchableOpacity
-            style={[
-              styles.uploadButton,
-              selectedImage && styles.uploadButtonWithImage,
-            ]}
-            onPress={handleImagePick}
-            activeOpacity={0.8}
-          >
-            {selectedImage ? (
-              <Image
-                source={{ uri: selectedImage.uri }}
-                style={styles.previewImage}
-              />
-            ) : (
-              <View style={styles.uploadPlaceholder}>
-                <MaterialCommunityIcons
-                  name="file-document-outline"
-                  size={40}
-                  color={theme.colors.text.secondary}
+      <ScrollView style={{ flex: 1 }}>
+        <View style={styles.formWrapper}>
+          <View style={styles.formSection}>
+            <Text style={styles.label}>Image</Text>
+            <TouchableOpacity
+              style={[
+                styles.uploadButton,
+                selectedImage && styles.uploadButtonWithImage,
+              ]}
+              onPress={handleImagePick}
+              activeOpacity={0.8}
+            >
+              {selectedImage ? (
+                <Image
+                  source={{ uri: selectedImage.uri }}
+                  style={styles.previewImage}
                 />
-                <Text style={styles.uploadButtonText}>
-                  Tap to Upload Receipt
-                </Text>
-              </View>
-            )}
-          </TouchableOpacity>
+              ) : (
+                <View style={styles.uploadPlaceholder}>
+                  <MaterialCommunityIcons
+                    name="file-document-outline"
+                    size={40}
+                    color={theme.colors.text.secondary}
+                  />
+                  <Text style={styles.uploadButtonText}>
+                    Tap to Upload Receipt
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.orContainer}>
+            <View style={styles.line} />
+            <Text style={styles.orText}>OR</Text>
+            <View style={styles.line} />
+          </View>
+          <View style={styles.cameraButtonWrapper}>
+            <TouchableOpacity
+              style={styles.fabCameraButton}
+              onPress={handleCameraButtonPress}
+              activeOpacity={0.85}
+              accessibilityLabel="Take a picture of your receipt"
+            >
+              <MaterialCommunityIcons
+                name="camera"
+                size={32}
+                color={theme.colors.primary}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
 
@@ -119,13 +156,47 @@ export default function ReceiptForm() {
 }
 
 const styles = StyleSheet.create({
+  orContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: 10,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: theme.colors.input.border,
+    opacity: 0.6,
+  },
+  orText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: theme.colors.text.secondary,
+    marginHorizontal: 8,
+    letterSpacing: 1,
+  },
   container: {
     flex: 1,
     justifyContent: "space-between",
     paddingBottom: theme.spacing.lg,
   },
+  cameraButtonWrapper: {
+    alignItems: "center",
+  },
+  fabCameraButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: theme.colors.primary,
+  },
+  formWrapper: {
+    rowGap: theme.spacing.md,
+  },
   formSection: {
-    gap: 8,
+    rowGap: theme.spacing.sm,
   },
   label: {
     fontSize: 16,
@@ -136,7 +207,7 @@ const styles = StyleSheet.create({
   uploadButton: {
     borderRadius: theme.borderRadius.md,
     width: "100%",
-    minHeight: 200,
+    height: 250,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,

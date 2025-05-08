@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
   View,
 } from "react-native";
 import { theme, sharedStyles } from "@/utils/theme";
@@ -30,12 +31,12 @@ export default function TextTransactionInput() {
             addBulkTransactions(data.transactions);
             router.replace("/confirm-transactions?type=text");
           } else {
-            alert("No transactions found in the text.");
+            Alert.alert("No transactions found in the text.");
           }
         },
         onError: (error) => {
           console.error("Error:", error);
-          alert(
+          Alert.alert(
             error.message ||
               "Failed to extract transactions. Please try again.",
           );

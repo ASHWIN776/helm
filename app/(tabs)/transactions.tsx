@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   RefreshControl,
   SafeAreaView,
   StyleSheet,
@@ -45,7 +46,7 @@ export default function Transactions() {
         setSelectedTransaction(null);
       },
       onError: (err) => {
-        alert(err.message || "Failed to update transaction");
+        Alert.alert(err.message || "Failed to update transaction");
       },
     });
   };
@@ -58,7 +59,7 @@ export default function Transactions() {
       },
       onError: (error) => {
         console.error("Error deleting transaction:", error);
-        alert("Error deleting transaction. Please try again.");
+        Alert.alert("Error deleting transaction. Please try again.");
       },
     });
   };

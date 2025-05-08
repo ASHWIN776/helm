@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import * as DocumentPicker from "expo-document-picker";
@@ -37,7 +38,7 @@ export default function StatementForm() {
       }
     } catch (err) {
       console.error("Error picking file:", err);
-      alert("Error selecting file. Please try again.");
+      Alert.alert("Error selecting file. Please try again.");
     }
   };
 

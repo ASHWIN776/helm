@@ -73,7 +73,7 @@ export default function TransactionForm({
 
   const handleSubmit = () => {
     if (!transaction.date || !transaction.amount || !transaction.description) {
-      alert("Please fill the required fields");
+      Alert.alert("Please fill the required fields");
       return;
     }
 
@@ -99,7 +99,7 @@ export default function TransactionForm({
       },
       onError: (error) => {
         console.error("Error adding transaction:", error);
-        alert("Error adding transaction. Please try again.");
+        Alert.alert("Error adding transaction. Please try again.");
       },
     });
   };

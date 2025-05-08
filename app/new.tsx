@@ -16,13 +16,13 @@ export default function New() {
 
     switch (type) {
       case "receipt":
-        title = "New Receipt";
+        title = "Receipt";
         break;
       case "statement":
-        title = "New Statement";
+        title = "Statement";
         break;
       case "form":
-        title = "New Transaction";
+        title = "Transaction";
         break;
       case "text":
         title = "Text";

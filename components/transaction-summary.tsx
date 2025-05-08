@@ -46,7 +46,7 @@ export function TransactionSummary({
           <Text style={styles.summaryLabel}>Shop</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={styles.summaryValue}>{string_clamp(merchant)}</Text>
-            {onMerchantChange && (
+            {onMerchantChange ? (
               <TouchableOpacity
                 onPress={() => {
                   setEditedMerchant(merchant || "");
@@ -61,11 +61,21 @@ export function TransactionSummary({
                   color={theme.colors.text.secondary}
                 />
               </TouchableOpacity>
-            )}
+            ) : undefined}
           </View>
         </View>
       ) : null}
-      {type === "statement" || type === "text" ? (
+      {/* If income is 0, just show total amount */}
+      {summaryData.income === 0 ? (
+        <View style={styles.summaryContent}>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Total Amount</Text>
+            <Text style={[styles.summaryValue, styles.totalText]}>
+              {formatCurrency(summaryData.total || 0)}
+            </Text>
+          </View>
+        </View>
+      ) : (
         <View style={styles.summaryContent}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Cash Inflow</Text>
@@ -77,15 +87,6 @@ export function TransactionSummary({
             <Text style={styles.summaryLabel}>Cash Outflow</Text>
             <Text style={[styles.summaryValue, styles.outflowText]}>
               {formatCurrency(summaryData.expense || 0)}
-            </Text>
-          </View>
-        </View>
-      ) : (
-        <View style={styles.summaryContent}>
-          <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Total Amount</Text>
-            <Text style={[styles.summaryValue, styles.totalText]}>
-              {formatCurrency(summaryData.total || 0)}
             </Text>
           </View>
         </View>

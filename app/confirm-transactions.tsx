@@ -15,7 +15,7 @@ import { theme } from "@/utils/theme";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useCreateTransactions } from "@/hooks/useCreateTransactions";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { TransactionSummary } from "@/components/transaction-summary";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { InlineTransactionEditForm } from "@/components/inline-transaction-edit-form";
@@ -36,23 +36,24 @@ export default function Confirm() {
   const [editTransaction, setEditTransaction] = React.useState<any>(null);
   const navigation = useNavigation();
 
-  const summaryData = React.useMemo(() => {
-    if (type === "statement" || type === "text") {
-      const income = transactions
-        .filter((t) => t.type === "income")
-        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
-      const expense = transactions
-        .filter((t) => t.type === "expense")
-        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
-      return { income, expense };
-    } else {
-      const total = transactions.reduce(
-        (sum, t) => sum + parseFloat(t.amount),
-        0,
-      );
-      return { total };
-    }
-  }, [transactions, type]);
+  const summaryData = useMemo(() => {
+    const income = transactions
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    const expense = transactions
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    const total = transactions.reduce(
+      (sum, t) => sum + parseFloat(t.amount),
+      0,
+    );
+
+    return {
+      income,
+      expense,
+      total,
+    };
+  }, [transactions]);
 
   const handleConfirm = () => {
     createTransactions(transactions, {

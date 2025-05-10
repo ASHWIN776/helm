@@ -87,18 +87,18 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.lg,
   },
   inputSection: {
-    rowGap: 8,
+    rowGap: theme.spacing.sm,
   },
   label: {
     fontSize: 16,
     fontWeight: "500",
     color: theme.colors.text.primary,
     marginLeft: 4,
-    marginBottom: 6,
   },
   textArea: {
     minHeight: 120,
     textAlignVertical: "top",
+    paddingVertical: theme.spacing.md,
   },
   submitButton: {
     backgroundColor: theme.colors.primary,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: 8,
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
   },
   submitButtonDisabled: {
     opacity: 0.7,

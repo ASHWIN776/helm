@@ -142,8 +142,10 @@ export default function DynamicChart({ data }: Props) {
               data.chartConfig?.yKeys.map((yKey, index) => (
                 <Line
                   key={yKey}
+                  strokeWidth={3}
                   points={points[yKey as keyof typeof points]}
                   color={colors[index % colors.length]}
+                  animate={{ type: "timing", duration: 1000 }}
                 />
               ))
             }

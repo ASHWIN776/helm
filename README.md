@@ -1,6 +1,6 @@
 ## helm
 
-Steer your finances with ease.
+Steer your finances with AI
 
 Built with [Expo](https://expo.dev).
 

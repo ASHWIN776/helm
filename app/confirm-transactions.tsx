@@ -197,6 +197,10 @@ export default function Confirm() {
                   </View>
                   <TouchableOpacity
                     onPress={() => {
+                      if (expandedIndex === index) {
+                        handleCancelEdit();
+                        return;
+                      }
                       setExpandedIndex(index);
                       setEditTransaction({ ...item });
                     }}

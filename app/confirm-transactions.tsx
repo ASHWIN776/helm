@@ -7,6 +7,8 @@ import {
   Alert,
   ActivityIndicator,
   Pressable,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useTransactionStore } from "@/store/transactionStore";
@@ -159,87 +161,93 @@ export default function Confirm() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TransactionSummary
-        type={type as "statement" | "receipt" | "text"}
-        summaryData={summaryData}
-        merchant={
-          transactions.length > 0 ? transactions[0].merchant : undefined
-        }
-        onMerchantChange={handleMerchantChange}
-      />
-      <View style={styles.listContainer}>
-        <View style={styles.listHeader}>
-          <Text style={styles.transactionCount}>
-            {transactions.length} Transaction
-            {transactions.length !== 1 ? "s" : ""}
-          </Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              {type === "statement" ? "Statement" : "Receipt"}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      >
+        <TransactionSummary
+          type={type as "statement" | "receipt" | "text"}
+          summaryData={summaryData}
+          merchant={
+            transactions.length > 0 ? transactions[0].merchant : undefined
+          }
+          onMerchantChange={handleMerchantChange}
+        />
+        <View style={styles.listContainer}>
+          <View style={styles.listHeader}>
+            <Text style={styles.transactionCount}>
+              {transactions.length} Transaction
+              {transactions.length !== 1 ? "s" : ""}
             </Text>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>
+                {type === "statement" ? "Statement" : "Receipt"}
+              </Text>
+            </View>
+          </View>
+          <FlashList
+            data={transactions}
+            extraData={expandedIndex}
+            renderItem={({ item, index }) => (
+              <View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View style={{ flex: 1 }}>
+                    <TransactionCard transaction={item} />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setExpandedIndex(index);
+                      setEditTransaction({ ...item });
+                    }}
+                    style={{ padding: 8 }}
+                    accessibilityLabel="Edit Transaction"
+                  >
+                    <MaterialCommunityIcons
+                      name="pencil"
+                      size={22}
+                      color={theme.colors.text.secondary}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {expandedIndex === index && editTransaction ? (
+                  <InlineTransactionEditForm
+                    transaction={editTransaction}
+                    onSave={handleSaveEdit}
+                    onCancel={handleCancelEdit}
+                    importType={type}
+                  />
+                ) : null}
+              </View>
+            )}
+            estimatedItemSize={100}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            contentContainerStyle={styles.contentContainer}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => handleCancel("cancel")}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit}
+              activeOpacity={0.8}
+            >
+              {isPending ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.submitButtonText}>Save</Text>
+              )}
+            </TouchableOpacity>
           </View>
         </View>
-        <FlashList
-          data={transactions}
-          extraData={expandedIndex}
-          renderItem={({ item, index }) => (
-            <View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ flex: 1 }}>
-                  <TransactionCard transaction={item} />
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    setExpandedIndex(index);
-                    setEditTransaction({ ...item });
-                  }}
-                  style={{ padding: 8 }}
-                  accessibilityLabel="Edit Transaction"
-                >
-                  <MaterialCommunityIcons
-                    name="pencil"
-                    size={22}
-                    color={theme.colors.text.secondary}
-                  />
-                </TouchableOpacity>
-              </View>
-              {expandedIndex === index && editTransaction ? (
-                <InlineTransactionEditForm
-                  transaction={editTransaction}
-                  onSave={handleSaveEdit}
-                  onCancel={handleCancelEdit}
-                  importType={type}
-                />
-              ) : null}
-            </View>
-          )}
-          estimatedItemSize={100}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          contentContainerStyle={styles.contentContainer}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={() => handleCancel("cancel")}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleSubmit}
-            activeOpacity={0.8}
-          >
-            {isPending ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text style={styles.submitButtonText}>Save</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -248,7 +256,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.white,
-    paddingBottom: theme.spacing.lg,
     paddingTop: theme.spacing.md,
   },
   listContainer: {
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
   },
   buttonRow: {
     flexDirection: "row",

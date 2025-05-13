@@ -3,6 +3,7 @@ import {
   Alert,
   RefreshControl,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -76,9 +77,14 @@ export default function Transactions() {
             <ActivityIndicator size="small" color={theme.colors.primary} />
           </View>
         ) : error ? (
-          <View style={styles.errorContainer}>
+          <ScrollView
+            contentContainerStyle={styles.errorContainer}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+            }
+          >
             <Text>Error loading transactions</Text>
-          </View>
+          </ScrollView>
         ) : (
           <>
             <FlashList

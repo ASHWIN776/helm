@@ -49,7 +49,7 @@ interface Props {
 export default function TransactionForm({
   transaction: initialTransaction,
   onSubmit,
-  submitLabel = "Add Transaction",
+  submitLabel = "Save",
   isPending = false,
   showDelete = false,
   onDelete,

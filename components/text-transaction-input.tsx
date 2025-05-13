@@ -73,7 +73,7 @@ export default function TextTransactionInput() {
         {isPending ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.submitButtonText}>Extract Transactions</Text>
+          <Text style={styles.submitButtonText}>Extract</Text>
         )}
       </TouchableOpacity>
     </KeyboardAvoidingView>

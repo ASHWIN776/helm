@@ -101,7 +101,7 @@ export default function StatementForm() {
         {isPending ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.submitButtonText}>Process Statement</Text>
+          <Text style={styles.submitButtonText}>Extract</Text>
         )}
       </TouchableOpacity>
     </View>

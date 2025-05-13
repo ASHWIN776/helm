@@ -33,13 +33,18 @@ export default function Index() {
 
     if (error || !dashboardData?.data) {
       return (
-        <View style={styles.centered}>
+        <ScrollView
+          contentContainerStyle={styles.centered}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+          }
+        >
           <Text style={styles.errorText}>
             {error
               ? `Error: ${error.message}`
               : "Could not load dashboard data."}
           </Text>
-        </View>
+        </ScrollView>
       );
     }
 

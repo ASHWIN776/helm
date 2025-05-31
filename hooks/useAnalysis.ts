@@ -1,9 +1,10 @@
 import { AnalysisResponse } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "@/utils/constants";
+import { authenticatedFetch } from "@/utils/helpers";
 
 const getAnalysis = async (message: string) => {
-  const response = await fetch(`${BASE_URL}/api/analysis`, {
+  const response = await authenticatedFetch(`${BASE_URL}/api/analysis`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

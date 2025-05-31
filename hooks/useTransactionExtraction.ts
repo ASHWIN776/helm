@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { UnsavedTransaction } from "@/utils/types";
 import { BASE_URL } from "@/utils/constants";
+import { authenticatedFetch } from "@/utils/helpers";
 
 // Allow either image or text input
 type TransactionExtractionInput =
@@ -42,7 +43,7 @@ export function useTransactionExtraction() {
         throw new Error("Either text or imageUri must be provided");
       }
 
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `${BASE_URL}/api/transactions/extract`,
         options,
       );

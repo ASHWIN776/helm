@@ -14,9 +14,11 @@ import { useCallback } from "react";
 import { formatCurrency } from "@/utils/helpers";
 import LastMonthComparison from "@/components/last-month-comparison";
 import { format } from "date-fns";
+import { authClient } from "@/auth-client";
 
 export default function Index() {
   const { data: dashboardData, isLoading, error, refetch } = useDashboardData();
+  const { data: session } = authClient.useSession();
 
   const onRefresh = useCallback(() => {
     refetch();
@@ -61,6 +63,9 @@ export default function Index() {
         }
         contentContainerStyle={styles.scrollContent}
       >
+        <Text style={styles.title}>
+          Hello {session?.user?.name.split(" ")[0]}
+        </Text>
         <View style={styles.summaryContainer}>
           <View style={styles.periodContainer}>
             <Text style={styles.periodTitle}>Today</Text>

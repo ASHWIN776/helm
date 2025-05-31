@@ -2,6 +2,7 @@ import { Transaction } from "@/utils/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "@/utils/constants";
+import { authenticatedFetch } from "@/utils/helpers";
 
 interface Response {
   error: boolean;
@@ -14,9 +15,12 @@ export function useDeleteTransaction() {
   return useMutation<Response, Error, Transaction>({
     mutationFn: async (transaction) => {
       const { id } = transaction;
-      const response = await fetch(`${BASE_URL}/api/transactions/${id}`, {
-        method: "DELETE",
-      });
+      const response = await authenticatedFetch(
+        `${BASE_URL}/api/transactions/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!response.ok) {
         throw new Error("Failed to delete transaction");
       }

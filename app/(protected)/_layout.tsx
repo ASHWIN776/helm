@@ -15,7 +15,7 @@ export default function ProtectedLayout() {
   const { hide } = useOverlayStore();
   const pathname = usePathname();
   const overlayAnim = useRef(new Animated.Value(0)).current;
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
     Animated.timing(overlayAnim, {
@@ -28,11 +28,9 @@ export default function ProtectedLayout() {
   const showAddButton = ADD_BUTTON_ROUTES.some((route) => pathname === route);
 
   // If no session, redirect to landing
-  if (!session) {
+  if (!session && !isPending) {
     return <Redirect href="/landing" />;
   }
-
-  console.log("Session: ", session);
 
   return (
     <QueryClientProvider client={queryClient}>

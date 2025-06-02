@@ -14,10 +14,12 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { authClient } from "@/auth-client";
 import { theme } from "@/utils/theme";
 import { router } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Settings() {
   const [darkMode, setDarkMode] = useState(false);
   const { data: session } = authClient.useSession();
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -33,6 +35,7 @@ export default function Settings() {
             await authClient.signOut({
               fetchOptions: {
                 onSuccess: () => {
+                  queryClient.clear();
                   router.push("/landing");
                 },
               },

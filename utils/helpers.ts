@@ -1,4 +1,25 @@
+import { authClient } from "@/auth-client";
 import { parse, isToday, isYesterday, format, isValid } from "date-fns";
+
+/**
+ * Wrapper for fetch that always sends cookies for authentication.
+ * Usage: authenticatedFetch(url, options)
+ */
+export async function authenticatedFetch(
+  input: RequestInfo | URL,
+  init: RequestInit = {},
+): Promise<Response> {
+  const cookies = authClient.getCookie();
+  const headers = {
+    ...(init.headers || {}),
+    Cookie: cookies,
+  };
+
+  return fetch(input, {
+    ...init,
+    headers,
+  });
+}
 
 export const formatCurrency = (amount: number) => {
   return `¥${amount.toFixed(2)}`;

@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/utils/constants";
+import { authenticatedFetch } from "@/utils/helpers";
 import { Transaction } from "@/utils/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -13,13 +14,16 @@ export function useEditTransaction() {
   return useMutation<Response, Error, Transaction>({
     mutationFn: async (transaction) => {
       const { id, ...rest } = transaction;
-      const response = await fetch(`${BASE_URL}/api/transactions/${id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          ...rest,
-          amount: parseFloat(rest.amount),
-        }),
-      });
+      const response = await authenticatedFetch(
+        `${BASE_URL}/api/transactions/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            ...rest,
+            amount: parseFloat(rest.amount),
+          }),
+        },
+      );
       if (!response.ok) {
         throw new Error("Failed to update transaction");
       }

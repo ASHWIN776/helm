@@ -1,4 +1,5 @@
-import { BASE_URL } from "@/utils/constants";
+import { BASE_URL } from "../utils/constants";
+import { authenticatedFetch } from "../utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 
 interface DashboardDataResponse {
@@ -44,7 +45,7 @@ export const useDashboardData = () => {
   return useQuery<DashboardDataResponse>({
     queryKey: ["dashboardData"],
     queryFn: async () => {
-      const response = await fetch(`${BASE_URL}/api/dashboard`);
+      const response = await authenticatedFetch(`${BASE_URL}/api/dashboard`);
       if (!response.ok) {
         throw new Error("Failed to fetch dashboard data");
       }

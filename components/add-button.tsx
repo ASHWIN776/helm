@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     borderRadius: theme.spacing.xl,
-    backgroundColor: theme.colors.card.background,
   },
   option: {
     position: "absolute",

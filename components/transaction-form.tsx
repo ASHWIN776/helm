@@ -66,6 +66,7 @@ export default function TransactionForm({
       merchant: "",
     },
   );
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const router = useRouter();
   const { mutate: createTransaction, isPending: isPendingCreate } =
     useCreateTransactions();
@@ -131,18 +132,43 @@ export default function TransactionForm({
       <ScrollView contentContainerStyle={{ gap: 24 }} style={{ flex: 1 }}>
         <View style={styles.formSection}>
           <Text style={styles.label}>Date</Text>
-          <DateTimePicker
-            value={new Date(transaction.date || new Date())}
-            mode="date"
-            onChange={(_, selectedDate: Date | undefined) => {
-              if (selectedDate) {
-                setTransaction((prev) => ({
-                  ...prev,
-                  date: selectedDate.toISOString().split("T")[0],
-                }));
-              }
-            }}
-          />
+          <Pressable
+            style={[
+              sharedStyles.input,
+              styles.textInput,
+              { justifyContent: "center" },
+            ]}
+            onPress={() => setShowDatePicker(true)}
+            accessibilityLabel="Select date"
+          >
+            <Text
+              style={{
+                color: transaction.date
+                  ? theme.colors.text.primary
+                  : theme.colors.text.secondary,
+              }}
+            >
+              {transaction.date
+                ? new Date(transaction.date).toLocaleDateString()
+                : "Select date"}
+            </Text>
+          </Pressable>
+          {showDatePicker && (
+            <DateTimePicker
+              value={transaction.date ? new Date(transaction.date) : new Date()}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+              onChange={(_, selectedDate) => {
+                setShowDatePicker(false);
+                if (selectedDate) {
+                  setTransaction((prev) => ({
+                    ...prev,
+                    date: selectedDate.toISOString().split("T")[0],
+                  }));
+                }
+              }}
+            />
+          )}
         </View>
 
         <View style={styles.formSection}>

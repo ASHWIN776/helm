@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.helm"
+      "bundleIdentifier": "com.ashwin.helm"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.helm"
+      "package": "com.ashwin.helm"
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +40,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ddc694c7-df17-46b1-8d01-3df0c4c636eb"
+      }
+    },
+    "owner": "ashwin_anil"
   }
 }

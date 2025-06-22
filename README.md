@@ -38,3 +38,29 @@ npx expo prebuild --platform android
 npx expo run:ios
 npx expo run:android
 ```
+
+## EAS 
+
+### Install eas-cli
+
+```bash
+npm install -g eas-cli
+eas whoami
+```
+
+### Configure EAS
+
+```bash
+eas init
+eas build:configure
+```
+
+### Build
+
+```bash
+eas build --profile development --platform ios|android
+```
+
+
+
+

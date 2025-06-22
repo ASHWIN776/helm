@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   Alert,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,6 +18,7 @@ import TransactionForm from "@/components/transaction-form";
 import { Transaction } from "@/utils/types";
 import { useEditTransaction } from "@/hooks/useEditTransaction";
 import { useDeleteTransaction } from "@/hooks/useDeleteTransaction";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Transactions() {
   const { data: transactions, isLoading, error, refetch } = useTransactions();

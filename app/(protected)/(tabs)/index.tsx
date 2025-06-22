@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   ActivityIndicator,
   ScrollView,
   RefreshControl,
@@ -15,6 +14,7 @@ import { formatCurrency } from "@/utils/helpers";
 import LastMonthComparison from "@/components/last-month-comparison";
 import { format } from "date-fns";
 import { authClient } from "@/auth-client";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const { data: dashboardData, isLoading, error, refetch } = useDashboardData();

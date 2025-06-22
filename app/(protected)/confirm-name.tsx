@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { theme } from "@/utils/theme";
@@ -13,6 +12,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Transaction } from "@/utils/types";
 import { useState } from "react";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type DescriptionItem = {
   original: string;

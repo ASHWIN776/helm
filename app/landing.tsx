@@ -4,20 +4,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { theme } from "@/utils/theme";
 import { authClient } from "@/auth-client";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LandingScreen() {
   const router = useRouter();
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/", // this will be converted to a deep link (eg. `myapp://dashboard`) on native
+      callbackURL: "/",
     });
   };
 

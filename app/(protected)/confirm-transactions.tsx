@@ -3,7 +3,6 @@ import {
   View,
   TouchableOpacity,
   Text,
-  SafeAreaView,
   Alert,
   ActivityIndicator,
   Pressable,
@@ -22,6 +21,7 @@ import { TransactionSummary } from "@/components/transaction-summary";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { InlineTransactionEditForm } from "@/components/inline-transaction-edit-form";
 import { ImportType, Transaction } from "@/utils/types";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Confirm() {
   const transactions = useTransactionStore((state) => state.transactions);

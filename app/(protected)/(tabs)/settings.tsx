@@ -25,7 +25,6 @@ export default function Settings() {
     Alert.alert("Logout", "Are you sure you want to logout?", [
       {
         text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
       {
